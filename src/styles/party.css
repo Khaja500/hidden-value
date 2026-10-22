@@ -1,0 +1,404 @@
+/* Multiplayer ("one screen") table. Uses the same tokens and ticket motifs as the single-player game. */
+
+/* ---- Setup ---------------------------------------------------------------------------------------------- */
+
+.party-setup__grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 16px;
+  margin-bottom: 28px;
+}
+
+.seg {
+  display: inline-flex;
+  border: 1px solid var(--rule-strong);
+  border-radius: 999px;
+  padding: 3px;
+  background: var(--sunken);
+  margin-bottom: 14px;
+}
+
+.seg__btn {
+  font: 600 0.9rem/1 var(--font-ui);
+  border: 0;
+  background: transparent;
+  color: var(--ink-2);
+  padding: 9px 14px;
+  border-radius: 999px;
+  cursor: pointer;
+}
+
+.seg__btn--on {
+  background: var(--surface);
+  color: var(--ink);
+  box-shadow: var(--shadow);
+}
+
+.party-setup__names {
+  list-style: none;
+  margin: 0 0 14px;
+  padding: 0;
+  display: grid;
+  gap: 8px;
+}
+
+.party-setup__names label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.party-setup__seat {
+  width: 2.4em;
+  color: var(--brass);
+  font-weight: 600;
+}
+
+.party-setup__names input {
+  flex: 1;
+  min-width: 0;
+  font: 500 1rem/1.2 var(--font-ui);
+  padding: 9px 10px;
+  border: 1px solid var(--rule-strong);
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  color: var(--ink);
+}
+
+.check {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  cursor: pointer;
+}
+
+.check input {
+  margin-top: 4px;
+  accent-color: var(--brass);
+}
+
+.party-setup__rules {
+  margin: 0 0 12px;
+  padding-left: 1.2em;
+  display: grid;
+  gap: 8px;
+}
+
+.party-setup__warn {
+  margin: 0;
+}
+
+.party-setup__tables-title {
+  font-size: 1.25rem;
+  margin: 0 0 12px;
+}
+
+.party-setup__table {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+  text-align: left;
+  font: inherit;
+  color: var(--ink);
+  cursor: pointer;
+}
+
+.party-setup__table:hover {
+  border-color: var(--rule-strong);
+}
+
+.party-setup__table--on {
+  border-color: var(--brass);
+  box-shadow:
+    0 0 0 2px var(--brass-soft),
+    var(--shadow-lift);
+}
+
+.party-setup__table-name {
+  font: 600 1.3rem/1.1 var(--font-display);
+}
+
+.party-setup__table--on .party-setup__table-name::after {
+  content: ' ✓';
+  color: var(--brass);
+}
+
+.party-setup__go {
+  margin-top: 22px;
+  align-items: center;
+  gap: 16px;
+}
+
+/* ---- The table ------------------------------------------------------------------------------------------ */
+
+.party {
+  display: grid;
+  gap: 16px;
+  grid-template-columns: minmax(0, 1fr) minmax(300px, 380px);
+  grid-template-areas:
+    'top top'
+    'seats seats'
+    'main feed'
+    'cards feed';
+  grid-template-rows: auto auto auto 1fr;
+  align-items: start;
+}
+
+.party__top {
+  grid-area: top;
+}
+.party__seats {
+  grid-area: seats;
+}
+.party__cards {
+  grid-area: cards;
+}
+.party__main {
+  grid-area: main;
+  scroll-margin-top: 72px;
+}
+.party__feed {
+  grid-area: feed;
+}
+
+.party__cards .cards__row {
+  justify-content: flex-start;
+}
+
+.seats__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 10px;
+}
+
+.seat {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 4px 8px;
+  padding: 10px 12px;
+  transition: border-color 160ms ease;
+}
+
+.seat--now {
+  border-color: var(--brass);
+  box-shadow:
+    0 0 0 2px var(--brass-soft),
+    var(--shadow);
+}
+
+.seat--done {
+  opacity: 0.78;
+}
+
+.seat__name {
+  font: 600 1.05rem/1.2 var(--font-display);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.seat__status {
+  justify-self: end;
+}
+
+.seat__units {
+  font-size: 1.05rem;
+  text-align: left;
+}
+
+.seat__meta {
+  grid-column: 1 / -1;
+  font-size: 0.82rem;
+}
+
+/* Hand-off: nothing private on screen, one big button for the next player. */
+.handoff {
+  text-align: center;
+  padding: 36px 20px 28px;
+}
+
+.handoff .stamp {
+  justify-content: center;
+}
+
+.handoff .stamp::after {
+  display: none;
+}
+
+.handoff__title {
+  font-size: clamp(1.5rem, 3.5vw, 2.2rem);
+  margin: 6px 0 10px;
+}
+
+.handoff__name {
+  color: var(--brass);
+}
+
+.handoff__note {
+  margin: 0 auto 22px;
+  max-width: 36ch;
+}
+
+.handoff__last {
+  margin: 18px 0 0;
+  font-size: 0.88rem;
+}
+
+/* A player's turn. */
+.turn__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.turn__head h2 {
+  margin: 0;
+  font-size: 1.5rem;
+}
+
+.turn__head h2:focus {
+  outline: none;
+}
+
+.turn__grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(260px, 340px);
+  gap: 16px;
+  align-items: start;
+}
+
+.turn__left {
+  display: grid;
+  gap: 16px;
+}
+
+.turn__mine {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  border-color: var(--brass);
+}
+
+.turn__mine p {
+  margin: 0;
+}
+
+/* Results. */
+.results__title {
+  font-size: clamp(1.4rem, 3vw, 2rem);
+  margin: 4px 0 14px;
+}
+
+.results__v {
+  color: var(--muted);
+  font-size: 0.7em;
+}
+
+.results__table th[scope='row'] {
+  font-weight: 600;
+}
+
+.results__first td,
+.results__first th {
+  background: var(--brass-soft);
+}
+
+.results__note {
+  font-size: 0.9rem;
+  margin: 12px 0;
+}
+
+.results__trades {
+  margin: 0 0 16px;
+}
+
+.results__trades summary {
+  cursor: pointer;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+/* Feed: players' passes are frequent with 3–4 players, so they stay quiet; trades keep the brass highlight. */
+.party__feed .feed__item--you.feed__item--pass {
+  color: var(--muted);
+}
+
+/* Feed: what happened since the current player's last turn. */
+.feed__item--new {
+  box-shadow: inset 3px 0 0 var(--brass);
+}
+
+/* Home: the multiplayer invitation. */
+.home__party {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  margin: 0 0 40px;
+}
+
+.home__party h2 {
+  margin: 0 0 6px;
+}
+
+.home__party p:last-child {
+  margin: 0;
+  max-width: 60ch;
+}
+
+@media (max-width: 1000px) {
+  .turn__grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@media (max-width: 860px) {
+  .party {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-areas:
+      'top'
+      'seats'
+      'main'
+      'cards'
+      'feed';
+    grid-template-rows: none;
+  }
+  .party-setup__grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .home__party {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
+@media (max-width: 520px) {
+  .seats__list {
+    grid-template-columns: 1fr 1fr;
+  }
+  .seat {
+    grid-template-columns: 1fr;
+  }
+  .seat__status {
+    justify-self: start;
+  }
+  .turn__mine {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .seg__btn {
+    padding: 9px 10px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .seat {
+    transition: none;
+  }
+}

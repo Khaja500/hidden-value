@@ -1,8 +1,8 @@
 import { DIFFICULTIES } from '../engine/rules';
-import type { PlayerView } from '../engine/types';
+import type { PublicView } from '../engine/types';
 
 interface Props {
-  view: PlayerView;
+  view: PublicView;
   modeLabel: string;
   pacingLabel: string;
   secondsLeft?: number | null;

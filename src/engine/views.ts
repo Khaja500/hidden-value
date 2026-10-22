@@ -25,6 +25,7 @@ export function publicConfig(c: GameConfig): PublicConfig {
     playerCards: c.playerCards,
     mmKind: c.mmKind,
     mmLearnsFromPlayer: c.mmLearnsFromPlayer,
+    ...(c.seats ? { seats: c.seats } : {}),
   };
 }
 
@@ -41,8 +42,16 @@ export function toPublicView(s: FullState): PublicView {
   };
 }
 
-export function privatePositions(config: Pick<GameConfig, 'playerCards'>): number[] {
+/** Every position held privately by a player. In multiplayer, player i holds position i. */
+export function privatePositions(config: Pick<GameConfig, 'playerCards' | 'seats'>): number[] {
+  if (config.seats) return Array.from({ length: config.seats }, (_, i) => i);
   return config.playerCards === 2 ? [0, 1] : [0];
+}
+
+/** The positions each player holds, by seat (a single seat in single-player games). */
+export function seatPositions(config: Pick<GameConfig, 'playerCards' | 'seats'>): number[][] {
+  if (config.seats) return Array.from({ length: config.seats }, (_, i) => [i]);
+  return [privatePositions(config)];
 }
 
 export function maxBuyFor(position: number, q: Quote): number {

@@ -45,6 +45,7 @@ export interface FilterOptions {
 interface HistoryEntry {
   publicMask: number;
   taker: 'bot' | 'player';
+  seat: number;
   side: ActionSide;
   q: QuoteFaced;
 }
@@ -70,7 +71,9 @@ export class ParticleFilter {
   private sums: Uint8Array;
   private w: Float64Array;
   private keys: Uint16Array;
+  /** Player-valuation key per particle and seat (stride `seats`). */
   private pkeys: Uint16Array;
+  private readonly seats: number;
   private publicMask = 0;
   private publicSum = 0;
   private publicCount = 0;
@@ -94,6 +97,7 @@ export class ParticleFilter {
     this.n = opts.particles ?? DEFAULT_PARTICLES;
     this.model = traderModel(opts.alpha);
     this.pm = opts.playerModel ?? null;
+    this.seats = this.pm ? this.pm.masks.length : 0;
     this.rng = new Rng(opts.seed);
     for (const k of opts.known ?? []) {
       this.knownMask |= 1 << k.position;
@@ -104,7 +108,7 @@ export class ParticleFilter {
     this.sums = new Uint8Array(n);
     this.w = new Float64Array(n).fill(1 / n);
     this.keys = new Uint16Array(n * N_SUBSETS);
-    this.pkeys = new Uint16Array(n);
+    this.pkeys = new Uint16Array(n * Math.max(1, this.seats));
     for (let i = 0; i < n; i++) this.drawParticle(i);
     this.refreshKeys();
   }
@@ -144,10 +148,12 @@ export class ParticleFilter {
   }
 
   private refreshKeys(): void {
-    const pmask = this.pm ? this.publicMask | this.pm.mask : 0;
+    const S = this.seats;
     for (let i = 0; i < this.n; i++) {
       writeKeys(this.vals, i * HAND_SIZE, this.publicMask, this.keys, i * N_SUBSETS);
-      if (this.pm) this.pkeys[i] = keyFor(this.vals, i * HAND_SIZE, pmask);
+      for (let s = 0; s < S; s++) {
+        this.pkeys[i * S + s] = keyFor(this.vals, i * HAND_SIZE, this.publicMask | this.pm!.masks[s]);
+      }
     }
   }
 
@@ -155,18 +161,16 @@ export class ParticleFilter {
   private historyLikelihood(i: number, scratch: Uint16Array): number {
     let like = 1;
     let mask = -1;
-    let pkey = 0;
     const off = i * HAND_SIZE;
     for (const h of this.history) {
       if (h.publicMask !== mask) {
         mask = h.publicMask;
         writeKeys(this.vals, off, mask, scratch, 0);
-        if (this.pm) pkey = keyFor(this.vals, off, mask | this.pm.mask);
       }
       like *=
         h.taker === 'bot'
           ? botLikelihood(scratch, 0, h.side, h.q, this.model)
-          : playerLikelihood(pkey, h.side, h.q, this.pm!);
+          : playerLikelihood(keyFor(this.vals, off, mask | this.pm!.masks[h.seat]), h.side, h.q, this.pm!);
     }
     return like;
   }
@@ -231,14 +235,18 @@ export class ParticleFilter {
    */
   observe(e: ActionEvent): void {
     if (e.taker === 'player' && (!this.pm || e.side === 'pass')) return;
+    const seat = e.seat ?? 0;
+    if (e.taker === 'player' && seat >= this.seats) throw new Error(`No player model for seat ${seat}`);
     const q = quoteFaced(e, this.publicEV());
-    const entry: HistoryEntry = { publicMask: this.publicMask, taker: e.taker, side: e.side, q };
+    const entry: HistoryEntry = { publicMask: this.publicMask, taker: e.taker, seat, side: e.side, q };
     this.history.push(entry);
     const w = this.w;
     if (e.taker === 'bot') {
       for (let i = 0; i < this.n; i++) w[i] *= botLikelihood(this.keys, i * N_SUBSETS, e.side, q, this.model);
     } else {
-      for (let i = 0; i < this.n; i++) w[i] *= playerLikelihood(this.pkeys[i], e.side, q, this.pm!);
+      const S = this.seats;
+      for (let i = 0; i < this.n; i++)
+        w[i] *= playerLikelihood(this.pkeys[i * S + seat], e.side, q, this.pm!);
     }
     this.normalize();
     this.maybeResample();
@@ -286,13 +294,14 @@ export class ParticleFilter {
     const vals = new Uint8Array(n * HAND_SIZE);
     const sums = new Uint8Array(n);
     const keys = new Uint16Array(n * N_SUBSETS);
-    const pkeys = new Uint16Array(n);
+    const S = this.seats;
+    const pkeys = new Uint16Array(n * Math.max(1, S));
     for (let i = 0; i < n; i++) {
       const s = idx[i];
       vals.set(this.vals.subarray(s * HAND_SIZE, s * HAND_SIZE + HAND_SIZE), i * HAND_SIZE);
       keys.set(this.keys.subarray(s * N_SUBSETS, s * N_SUBSETS + N_SUBSETS), i * N_SUBSETS);
       sums[i] = this.sums[s];
-      pkeys[i] = this.pkeys[s];
+      if (S > 0) pkeys.set(this.pkeys.subarray(s * S, s * S + S), i * S);
     }
     this.vals = vals;
     this.sums = sums;

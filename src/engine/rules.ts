@@ -87,6 +87,11 @@ export function makeConfig(
   };
 }
 
+/** A multiplayer table: the difficulty's α and market maker, with one card for each of `seats` players. */
+export function makeMultiConfig(difficulty: Difficulty, seats: number, seed: number): GameConfig {
+  return makeConfig(difficulty, seed, { playerCards: 1, seats });
+}
+
 export function roundToTick(x: number, dir: 'down' | 'up'): number {
   // Small epsilon so that values like 36.5000000001 do not round up a full tick.
   const eps = 1e-9;

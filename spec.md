@@ -555,3 +555,49 @@ Changes made while building, with the reasons for each. `docs/DECISIONS.md` has 
 **Corrected claims.** Two claims made during the build were wrong and have been fixed in the docs and on the site:
 - The learned MM does **not** beat the naive MM at every α: at α = 0 the naive MM earns 34.0 against its 30.6.
 - Spread capture, not the inventory term, is the largest single source of the market makers' profit.
+
+---
+
+## 15. Multiplayer edition (branch `multiplayer`)
+
+Added on 22 Oct 2026 at the user's request. It lives on the `multiplayer` branch of `hidden-value` and is published from a separate public repo, **`Khaja500/hidden-value-multiplayer`**, at **https://khaja500.github.io/hidden-value-multiplayer/**. A repo can host only one Pages site, and the user chose a separate repo so the original site and `main` stay untouched. Everything in §1–§14 still applies; this section adds a mode.
+
+### 15.1 Rules
+- **Players:** 2–4 share one screen. Each holds exactly one card: player *i* holds position *i*. Any of the four tables (§2.7) can be used for α and the market maker, with one card per player, Easy included.
+- **Reveals:** rounds 2–4 reveal positions nobody holds first, in seeded random order. With 3 players only 2 such cards exist, so round 4 reveals a random player's card; with 4 players, rounds 3 and 4 do. *(This was chosen by the user; the alternatives were letting players share a card, or allowing 2 players only.)* With 2 players no player card is ever revealed, as in single-player.
+- **Step:** one bot arrives and acts and the MM requotes (§2.4). Then **every player acts once** (buy 1–3 at the ask, sell 1–3 at the bid, or pass), with the MM requoting after each. The first player rotates every step: at step *k* (0-based across the game) the order starts at player *k* mod *n*.
+- **Limits:** ±10 per player and 3 per trade, as in §2.5. The MM keeps its ±25 limit.
+- **Bots:** the same pre-drawn tickets as a single-player game on the same seed, whatever the players do.
+- **Settlement:** each player's P&L as in §2.6; best P&L wins. Zero-sum now covers all players + MM + bots.
+- **Turn-based only:** a timer does not fit a hand-off between people.
+
+### 15.2 Information on a shared screen
+- **Hand-off screen:** between turns, nothing private is on screen or in the UI store. "Pass the screen to *name*" has one button, "I'm *name*: show my card" (Enter). The player's card, belief and Advisor appear only after that. They hide again as soon as the player acts, or on Esc / "Hide my card".
+- **Public:** quotes, reveals, the trade feed **with player names** (passes included), each player's units, trade count and hints, whose turn it is, and the order.
+- **Per-player view:** the engine builds a `PlayerView` per seat (`seat` field set) containing only that player's card. The Hard MM sees `ActionEvent.seat` and models each player with their own card position. Its particle filter keeps one player-valuation key per seat.
+- **Advisor (optional, counted as hints):** one per player, fed only that player's view. It reads the bots' order flow, not the other players' trades; reading those is the game. No post-trade verdicts during play, since the next player would see them.
+- **Required tests:**
+  - zero-sum (property)
+  - deterministic replay
+  - turn order and rotation
+  - reveal order by player count
+  - a player's view never contains another player's hidden card
+  - no-cheat: advice is identical when every card the player cannot see is scrambled
+  - the Hard MM reads each seat with its own mask
+  - **store and DOM no-leak:** during hand-offs, only public cards; during a turn, only public cards plus that player's
+  - Playwright full games with 2 and 3 players
+
+### 15.3 Results
+- Standings by P&L, with each player's card, trades, hints, and **expected** P&L: the sum over their trades of size × edge at the time, from their own Advisor estimate. **Luck** is P&L − expected.
+- A graded list of every player trade, the MM's and bots' P&L, and all five cards with their holders.
+- Buttons: rematch on a new deal, replay the same deal, or change players or table.
+
+### 15.4 Site changes
+- New route `#/multiplayer` (nav "Multiplayer"), a "Play with friends" button and a section on Home, and a section on About.
+- The site's storage prefix is `hidden-value-mp:`, because both editions share the khaja500.github.io origin. Vite `base` is `/hidden-value-multiplayer/`, and `REPO_URL` points at the new repo.
+
+### 15.5 Definition of done (multiplayer)
+- [ ] Live at `https://khaja500.github.io/hidden-value-multiplayer/` from the public repo `hidden-value-multiplayer`, deployed by GitHub Actions; the original site is unchanged
+- [ ] 2-, 3- and 4-player games play to settlement on desktop and phone sizes, at every table
+- [ ] All single-player tests still pass; the multiplayer engine, no-cheat and no-leak tests pass; Playwright plays 2- and 3-player games
+- [ ] README, About, spec, plan and DECISIONS describe the multiplayer edition

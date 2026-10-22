@@ -79,6 +79,9 @@ export function Home() {
             <a className="btn btn--primary btn--big" href={href('/play')} data-testid="home-play">
               Play
             </a>
+            <a className="btn" href={href('/multiplayer')} data-testid="home-multiplayer">
+              Play with friends
+            </a>
             <a className="btn" href={href('/tutorial')}>
               Learn in 3 minutes
             </a>
@@ -121,6 +124,20 @@ export function Home() {
             </p>
           </article>
         </div>
+      </section>
+
+      <section className="home__party ticket ticket--perf" aria-labelledby="party-title">
+        <div>
+          <p className="stamp">New: multiplayer</p>
+          <h2 id="party-title">Two to four players, one screen</h2>
+          <p>
+            Each of you holds a different hidden card. Take turns trading with the same market maker, pass the
+            screen between turns, and read each other’s trades in the feed. Best P&amp;L at settlement wins.
+          </p>
+        </div>
+        <a className="btn btn--primary" href={href('/multiplayer')}>
+          Set up a table
+        </a>
       </section>
 
       <section className="home__levels" aria-labelledby="levels-title">

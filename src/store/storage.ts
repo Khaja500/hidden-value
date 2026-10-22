@@ -3,7 +3,9 @@
  * reads fall back to an in-memory copy and failed writes are ignored.
  */
 const memory = new Map<string, string>();
-const PREFIX = 'hidden-value:';
+// Both editions are served from khaja500.github.io and so share localStorage: a separate prefix keeps this
+// edition's settings, logs and leaderboards apart from the original site's.
+const PREFIX = 'hidden-value-mp:';
 
 function backend(): Storage | null {
   try {

@@ -11,6 +11,7 @@ import { BOT_MAX_SIZE, INFORMED_K_PROBS } from './rules';
 import { newAccount, type Account, type BotTicket, type FullState } from './state';
 import type {
   ActionEvent,
+  ActionSide,
   GameConfig,
   MarketMaker,
   PlayerAction,
@@ -19,7 +20,9 @@ import type {
   PublicEvent,
   PublicView,
   Quote,
+  Revealed,
   SettledView,
+  Side,
 } from './types';
 import {
   maxBuyFor,
@@ -43,17 +46,69 @@ export function publicExpectedValue(revealed: readonly { card: number }[]): numb
   return expectedValue(sum, revealed.length);
 }
 
-function freezeQuote(q: Quote): Quote {
+export function freezeQuote(q: Quote): Quote {
   return Object.freeze({ bid: q.bid, ask: q.ask, bidSize: q.bidSize, askSize: q.askSize });
 }
 
+/**
+ * Deals the 5 cards and the reveal order. Reveals come from positions no player holds. Only in multiplayer games
+ * with 3–4 players are there too few of those; the remaining reveals are then players' cards, in random order.
+ */
 export function dealCards(config: GameConfig): { cards: number[]; revealOrder: number[] } {
   const rng = new Rng(hashSeed(config.seed, 'deal'));
   const deck = rng.shuffle(Array.from({ length: DECK_SIZE }, (_, i) => i));
   const cards = deck.slice(0, HAND_SIZE);
   const priv = privatePositions(config);
   const revealable = rng.shuffle([0, 1, 2, 3, 4].filter((p) => !priv.includes(p)));
+  if (config.seats && revealable.length < config.rounds - 1) revealable.push(...rng.shuffle(priv));
   return { cards, revealOrder: revealable.slice(0, config.rounds - 1) };
+}
+
+/** What a bot does at a quote: its side, the size and price it trades at, and an informed bot's valuation. */
+export function botDecision(
+  t: BotTicket,
+  q: Quote,
+  cards: readonly number[],
+  revealed: readonly Revealed[],
+): { side: ActionSide; size: number; price: number | null; valuation: number | null } {
+  let side: ActionSide;
+  let valuation: number | null = null;
+  if (t.type === 'noise') {
+    side = noiseDecision(t.uNoise, t.uTol, q, publicExpectedValue(revealed));
+  } else {
+    const known = [...revealed.map((r) => r.position), ...t.positions];
+    valuation = valuationFromPositions(cards, known);
+    side = informedDecision(valuation, q);
+  }
+  if (side === 'buy') return { side, size: Math.min(t.size, q.askSize), price: q.ask, valuation };
+  if (side === 'sell') return { side, size: Math.min(t.size, q.bidSize), price: q.bid, valuation };
+  return { side, size: 0, price: null, valuation };
+}
+
+/** Books a taker's trade against the market maker. */
+export function applyTrade(taker: Account, mm: Account, side: Side, size: number, price: number): void {
+  const dir = side === 'buy' ? 1 : -1;
+  taker.position += dir * size;
+  taker.cash -= dir * size * price;
+  mm.position -= dir * size;
+  mm.cash += dir * size * price;
+}
+
+/** The average entry price of a position after a trade (null when the trade leaves it flat). */
+export function nextAvgPrice(
+  pos: number,
+  avg: number | null,
+  side: Side,
+  size: number,
+  price: number,
+): number | null {
+  const delta = side === 'buy' ? size : -size;
+  const next = pos + delta;
+  if (next === 0) return null;
+  if (pos === 0 || Math.sign(pos) !== Math.sign(next)) return price;
+  if (Math.sign(delta) === Math.sign(pos))
+    return ((avg ?? price) * Math.abs(pos) + price * size) / Math.abs(next);
+  return avg;
 }
 
 /** Bot arrivals are drawn up front with a fixed number of draws per step (common random numbers across α). */
@@ -185,39 +240,13 @@ export class Game {
     this.botStep();
   }
 
-  private trade(taker: Account, side: 'buy' | 'sell', size: number, price: number): void {
-    const mm = this.s.accounts.mm;
-    const dir = side === 'buy' ? 1 : -1;
-    taker.position += dir * size;
-    taker.cash -= dir * size * price;
-    mm.position -= dir * size;
-    mm.cash += dir * size * price;
-  }
-
   private botStep(): void {
     const s = this.s;
     const idx = (s.round - 1) * this.config.stepsPerRound + (s.step - 1);
     const t = s.tickets[idx];
     const q = s.quote;
-    let side;
-    let valuation: number | null = null;
-    if (t.type === 'noise') {
-      side = noiseDecision(t.uNoise, t.uTol, q, publicExpectedValue(s.revealed));
-    } else {
-      const known = [...s.revealed.map((r) => r.position), ...t.positions];
-      valuation = valuationFromPositions(s.cards, known);
-      side = informedDecision(valuation, q);
-    }
-    let size = 0;
-    let price: number | null = null;
-    if (side === 'buy') {
-      size = Math.min(t.size, q.askSize);
-      price = q.ask;
-    } else if (side === 'sell') {
-      size = Math.min(t.size, q.bidSize);
-      price = q.bid;
-    }
-    if (side !== 'pass') this.trade(s.accounts[t.type], side, size, price as number);
+    const { side, size, price, valuation } = botDecision(t, q, s.cards, s.revealed);
+    if (side !== 'pass') applyTrade(s.accounts[t.type], s.accounts.mm, side, size, price as number);
     const ev = this.push<ActionEvent>({
       kind: 'action',
       seq: s.events.length,
@@ -256,8 +285,8 @@ export class Game {
         throw new Error(`Illegal ${action.side} of ${action.size} (max ${max})`);
       }
       price = (action.side === 'buy' ? q.ask : q.bid) as number;
-      this.updateAvgPrice(action.side, action.size, price);
-      this.trade(player, action.side, action.size, price);
+      s.playerAvgPrice = nextAvgPrice(player.position, s.playerAvgPrice, action.side, action.size, price);
+      applyTrade(player, s.accounts.mm, action.side, action.size, price);
     }
     s.actions.push({ side: action.side, size: action.size });
     const ev = this.push<ActionEvent>({
@@ -274,18 +303,6 @@ export class Game {
     this.mm.onEvent(ev);
     this.requote();
     this.advance();
-  }
-
-  private updateAvgPrice(side: 'buy' | 'sell', size: number, price: number): void {
-    const s = this.s;
-    const pos = s.accounts.player.position;
-    const delta = side === 'buy' ? size : -size;
-    const next = pos + delta;
-    if (next === 0) s.playerAvgPrice = null;
-    else if (pos === 0 || Math.sign(pos) !== Math.sign(next)) s.playerAvgPrice = price;
-    else if (Math.sign(delta) === Math.sign(pos)) {
-      s.playerAvgPrice = ((s.playerAvgPrice ?? price) * Math.abs(pos) + price * size) / Math.abs(next);
-    }
   }
 
   private advance(): void {

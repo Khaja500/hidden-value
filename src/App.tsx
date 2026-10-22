@@ -5,6 +5,7 @@ import { Play } from './pages/Play';
 import { href, useRoute } from './router';
 import { applyTheme, useSettings, type Theme } from './store/settings';
 
+const Party = lazy(() => import('./pages/Party').then((m) => ({ default: m.Party })));
 const Tutorial = lazy(() => import('./pages/Tutorial').then((m) => ({ default: m.Tutorial })));
 const Review = lazy(() => import('./pages/Review').then((m) => ({ default: m.Review })));
 const Daily = lazy(() => import('./pages/Daily').then((m) => ({ default: m.Daily })));
@@ -14,6 +15,7 @@ const About = lazy(() => import('./pages/About').then((m) => ({ default: m.About
 
 const NAV = [
   { to: '/play', label: 'Play', names: ['play'] },
+  { to: '/multiplayer', label: 'Multiplayer', names: ['party'] },
   { to: '/tutorial', label: 'Tutorial', names: ['tutorial'] },
   { to: '/daily', label: 'Daily', names: ['daily'] },
   { to: '/review', label: 'Review', names: ['review', 'reviewList'] },
@@ -86,6 +88,9 @@ export function App() {
       break;
     case 'play':
       page = <Play query={route.query} />;
+      break;
+    case 'party':
+      page = <Party />;
       break;
     case 'tutorial':
       page = <Tutorial />;

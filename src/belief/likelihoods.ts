@@ -78,10 +78,11 @@ export function traderModel(alpha: number): TraderModel {
 /**
  * How a market maker that learns from the player models them (Hard mode): with probability β the player trades
  * on their private card(s) (buys if their valuation exceeds the ask), otherwise at random with probability `base`.
- * Only the player's trades are used; their passes are ignored.
+ * Only the player's trades are used; their passes are ignored. `masks[seat]` is the positions that player holds
+ * (one entry in single-player games; one per player in multiplayer).
  */
 export interface PlayerTakerModel {
-  mask: number;
+  masks: number[];
   beta: number;
   base: number;
 }

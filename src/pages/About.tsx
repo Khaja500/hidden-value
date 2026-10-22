@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { REPO_URL } from '../config';
+import { ORIGINAL_SITE_URL, REPO_URL } from '../config';
 import { DEFAULT_ADVISOR_PARAMS } from '../agents/advisor';
 import { DEFAULT_GAMMA, DEFAULT_RISK_COEF } from '../agents/mmAnalytical';
 import { DEFAULT_PARTICLES } from '../belief/particleFilter';
@@ -30,6 +30,25 @@ export function About() {
           has seen one or two of the cards. Then you may buy at the ask or sell at the bid. You see one card
           the market maker does not (two on Easy). At the end, every position is paid out at V. The player,
           the market maker and the bots always sum to exactly zero.
+        </p>
+      </section>
+
+      <section>
+        <h2>Multiplayer on one screen</h2>
+        <p>
+          This edition adds a <a href={href('/multiplayer')}>multiplayer</a> table for two to four people
+          sharing one device. Each player holds a different card (player 1 the first position, and so on).
+          Each step one bot trades, then every player trades once in turn, and the first player rotates every
+          step. Between turns a hand-off screen hides everything private until the next player taps to see
+          their own card. Reveals use cards nobody holds first, so with three or four players one or two
+          players’ cards are turned face up in the late rounds.
+        </p>
+        <p>
+          On the Hard table the market maker reads every player’s trades, each with that player’s own card
+          position. Each player’s Advisor reads the bots’ order flow but not the other players’ trades, so
+          reading your friends is up to you. At the end, each trade is graded by the edge it had when it was
+          made, which separates skill from luck. The original single-player site is still at{' '}
+          <a href={ORIGINAL_SITE_URL}>{ORIGINAL_SITE_URL.replace('https://', '')}</a>.
         </p>
       </section>
 

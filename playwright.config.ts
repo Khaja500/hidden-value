@@ -6,13 +6,13 @@ export default defineConfig({
   retries: process.env.CI ? 1 : 0,
   reporter: process.env.CI ? 'github' : 'list',
   use: {
-    baseURL: 'http://localhost:4173/hidden-value/',
+    baseURL: 'http://localhost:4173/hidden-value-multiplayer/',
     trace: 'retain-on-failure',
   },
   projects: [{ name: 'chromium', use: { ...devices['Desktop Chrome'] } }],
   webServer: {
     command: 'npm run build && npx vite preview --port 4173 --strictPort',
-    url: 'http://localhost:4173/hidden-value/',
+    url: 'http://localhost:4173/hidden-value-multiplayer/',
     reuseExistingServer: !process.env.CI,
     timeout: 180_000,
   },

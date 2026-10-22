@@ -19,7 +19,7 @@ import type {
   Quote,
   QuoteExplanation,
 } from '../engine/types';
-import { privatePositions } from '../engine/views';
+import { seatPositions } from '../engine/views';
 import { finishQuote, replayView } from './quoting';
 import { describeRemoval } from './mmNaive';
 
@@ -32,8 +32,8 @@ export interface AnalyticalSettings {
   riskCoef: number;
   particles?: number;
   seed: number;
-  /** Mask of the player's private positions when the MM learns from the player's trades (Hard). */
-  playerMask: number | null;
+  /** Masks of each player's private positions, by seat, when the MM learns from the players' trades (Hard). */
+  playerMasks: number[] | null;
   disableSkew: boolean;
   disableAdverseSelection: boolean;
   disableRiskSpread: boolean;
@@ -43,14 +43,14 @@ export interface AnalyticalSettings {
 
 export function analyticalSettings(config: GameConfig): AnalyticalSettings {
   const m = config.mm;
-  const mask = privatePositions(config).reduce((a, p) => a | (1 << p), 0);
+  const masks = seatPositions(config).map((ps) => ps.reduce((a, p) => a | (1 << p), 0));
   return {
     alpha: m.assumedAlpha ?? config.alpha,
     gamma: m.gamma ?? DEFAULT_GAMMA,
     riskCoef: m.riskCoef ?? DEFAULT_RISK_COEF,
     particles: m.particles,
     seed: hashSeed(config.seed, 'mm'),
-    playerMask: config.mmLearnsFromPlayer ? mask : null,
+    playerMasks: config.mmLearnsFromPlayer ? masks : null,
     disableSkew: !!m.disableSkew,
     disableAdverseSelection: !!m.disableAdverseSelection,
     disableRiskSpread: !!m.disableRiskSpread,
@@ -88,9 +88,9 @@ export class AnalyticalMM implements MarketMaker {
       seed: settings.seed,
       particles: settings.particles,
       playerModel:
-        settings.playerMask === null
+        settings.playerMasks === null
           ? null
-          : { mask: settings.playerMask, beta: DEFAULT_PLAYER_BETA, base: DEFAULT_PLAYER_BASE },
+          : { masks: settings.playerMasks, beta: DEFAULT_PLAYER_BETA, base: DEFAULT_PLAYER_BASE },
     });
     this.roundFrom = this.filter.mean();
   }
@@ -153,8 +153,10 @@ export class AnalyticalMM implements MarketMaker {
       reasons.push({ cause: 'orderFlow', detail: flowDetail(bf, 'this round'), delta: bf.delta });
     }
     const pf = this.playerFlow;
-    if (this.settings.playerMask !== null && pf.buys + pf.sells > 0) {
-      reasons.push({ cause: 'playerFlow', detail: flowDetail(pf, 'from you this round'), delta: pf.delta });
+    if (this.settings.playerMasks !== null && pf.buys + pf.sells > 0) {
+      const from =
+        this.settings.playerMasks.length > 1 ? 'from the players this round' : 'from you this round';
+      reasons.push({ cause: 'playerFlow', detail: flowDetail(pf, from), delta: pf.delta });
     }
     this.last = {
       mmKind: 'analytical',

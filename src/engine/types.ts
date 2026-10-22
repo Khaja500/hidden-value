@@ -40,6 +40,8 @@ export interface ActionEvent {
   price: number | null;
   /** The quote the taker faced. */
   quote: Quote;
+  /** Multiplayer: which player (0-based seat) acted. Absent in single-player games. */
+  seat?: number;
 }
 
 export interface QuoteEvent {
@@ -85,6 +87,8 @@ export interface GameConfig {
   /** Hard mode: the MM treats the player as a possibly informed taker. */
   mmLearnsFromPlayer: boolean;
   mm: MMParams;
+  /** Multiplayer: the number of players sharing one screen (2–4), each holding one card. Absent in single-player games. */
+  seats?: number;
 }
 
 /** The parts of the config that the player (and everyone else) can see. */
@@ -96,6 +100,7 @@ export interface PublicConfig {
   playerCards: 1 | 2;
   mmKind: MMKind;
   mmLearnsFromPlayer: boolean;
+  seats?: number;
 }
 
 export type Phase = 'awaitingPlayer' | 'settled';
@@ -132,6 +137,8 @@ export interface PlayerView extends PublicView {
   /** Largest legal buy / sell size right now. */
   maxBuy: number;
   maxSell: number;
+  /** Multiplayer: the player (0-based seat) this view belongs to. */
+  seat?: number;
 }
 
 export interface Settlement {

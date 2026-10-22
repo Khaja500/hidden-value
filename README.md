@@ -1,8 +1,10 @@
-# Hidden Value
+# Hidden Value — multiplayer edition
 
-**A trading card game against an explainable AI market maker, running entirely in your browser.**
+**A trading card game against an explainable AI market maker, running entirely in your browser, now with a multiplayer table for 2–4 people sharing one screen.**
 
-**▶ Play it: https://khaja500.github.io/hidden-value/**
+**▶ Play it: https://khaja500.github.io/hidden-value-multiplayer/** (multiplayer: [#/multiplayer](https://khaja500.github.io/hidden-value-multiplayer/#/multiplayer))
+
+This edition is the [original Hidden Value](https://github.com/Khaja500/hidden-value) (single-player, live at https://khaja500.github.io/hidden-value/) plus multiplayer. It is developed on the `multiplayer` branch of the original repo and published from this repo; everything single-player works exactly as in the original.
 
 ![The play screen: the market maker's quote, your private King, and the Advisor recommending a buy with its reasons](docs/screenshots/play.png)
 
@@ -26,6 +28,15 @@ No server, no accounts, no real money: everything (game engine, particle filters
 | Hard   | 1          | 35%              | Analytical, and it learns from your trades              |
 | Expert | 1          | 35%              | Learned: a neural policy trained by simulation          |
 
+## Multiplayer (one screen)
+
+- **2–4 players** share one device. Each holds a different one of the five cards: player 1 the first position, player 2 the second, and so on. Any of the four tables can be used, with one card per player.
+- **Each step:** one bot trades, then every player trades once, in turn. The market maker requotes after each of them, and the first player rotates every step so nobody always gets the freshest price.
+- **Privacy:** between turns a hand-off screen hides everything private. The next player taps **Show my card** (or presses Enter). Their card hides again the moment they act, or with Esc.
+- **Reveals** use cards nobody holds first. With 3 players there are only 2 such cards, so round 4 reveals a random player's card; with 4 players, rounds 3 and 4 do.
+- **Reading each other:** every trade is in the feed with the player's name. On Hard, the market maker learns from every player's trades, each modelled with that player's own card position. Each player's Advisor (optional, counted as hints) reads the bots' flow but not the other players.
+- **Results:** best P&L wins. Each trade is graded by its expected profit at the time, from that player's own estimate, so the results separate skill ("expected") from luck. Then a rematch on a new deal, or a replay of the same deal.
+
 Modes: **Tutorial** (guided first game with an interactive Glosten–Milgrom example), **Practice** (any table; Advisor on demand; turn-based or timed), **Daily challenge** (the same deal for everyone each UTC day, no Advisor, local leaderboard), **Review** (after every game), **Sandbox** (run your own simulations), **Research**.
 
 ## How it works
@@ -37,7 +48,7 @@ Modes: **Tutorial** (guided first game with an interactive Glosten–Milgrom exa
 
 ## Research highlights
 
-All numbers are from `npm run sim` / `npm run train`, on held-out test deals (tuning used separate validation deals). Full charts are on the [Research page](https://khaja500.github.io/hidden-value/#/research).
+All numbers are from `npm run sim` / `npm run train`, on held-out test deals (tuning used separate validation deals). Full charts are on the [Research page](https://khaja500.github.io/hidden-value-multiplayer/#/research).
 
 ![The α sweep on the Research page](docs/screenshots/research.png)
 
@@ -54,7 +65,7 @@ Design choices and their reasons are in [docs/DECISIONS.md](docs/DECISIONS.md); 
 
 ```bash
 npm install
-npm run dev          # http://localhost:5173/hidden-value/
+npm run dev          # http://localhost:5173/hidden-value-multiplayer/
 npm test             # unit + property tests (Vitest, fast-check)
 npm run e2e          # Playwright: full games in a real browser
 npm run lint && npm run typecheck
@@ -68,16 +79,16 @@ Experiments run on all CPU cores with worker threads; the full set takes about 1
 ## Project structure
 
 ```
-src/engine/    cards, seeded RNG, events, rules, full state, views (information boundaries), game driver
+src/engine/    cards, seeded RNG, events, rules, full state, views (information boundaries), game drivers (single-player and multiplayer)
 src/belief/    particle filter, informed-trader likelihoods, calibration
 src/agents/    noise and informed bots, naive / analytical / learned market makers, Advisor, Advisor bot
 src/explain/   quote explanations, counterfactual replays, attribution, review, lessons, text rendering
 src/sim/       headless simulation, research checks, CEM training helpers, Sandbox runs
 src/workers/   Web Worker for reviews, skill scores and the Sandbox
-src/store/     Zustand game store (holds only the PlayerView), settings, safe localStorage
-src/pages/     Home, Play, Tutorial, Review, Daily, Research, Sandbox, About
+src/store/     Zustand stores (single-player holds only the PlayerView; multiplayer holds public info plus the current player's view during their turn), settings, safe localStorage
+src/pages/     Home, Play, Multiplayer (Party.tsx), Tutorial, Review, Daily, Research, Sandbox, About
 scripts/       sim.ts, train.ts, bench.ts (Node + tsx, worker-thread pool)
-tests/         zero-sum, replay, calibration, decomposition, counterfactual, no-cheat, UI no-leak, e2e
+tests/         zero-sum, replay, calibration, decomposition, counterfactual, no-cheat, UI no-leak, multiplayer, e2e
 ```
 
 ## Tech stack

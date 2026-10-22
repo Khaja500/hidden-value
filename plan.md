@@ -172,6 +172,16 @@ Other points:
 - Extra Playwright tests play a full game at every difficulty on a phone-sized screen.
 - The live site was checked in a real browser: every route loads (including after a refresh), with no console errors.
 
+### 11. Multiplayer edition (one screen, 2–4 players) — [ ] in progress
+🤖 Requested after step 10. Built on the `multiplayer` branch and published from a new repo, so `main` and the original site stay as they are (spec §15).
+- Engine: a `MultiGame` driver with per-seat views, rotating turn order, and reveals that use unheld cards first. The Hard MM's particle filter models each player with their own card position. The single-player driver shares the bot, trade and deal helpers, and its behaviour is unchanged.
+- Tests first: zero-sum, replay, turn order, reveal order, seat-view boundaries, no-cheat per player, per-seat Hard MM, store/DOM no-leak across hand-offs.
+- UI: the `#/multiplayer` setup page (players, names, table, Advisor on/off), the table with hand-off screens, the per-player turn panel, and results graded by expected edge versus luck. Plus a Home entry point, an About section and the README.
+- Hosting: create the public repo `hidden-value-multiplayer`, push the branch as its `main`, enable Pages (GitHub Actions), set the homepage. Keep the branch in `hidden-value` in sync.
+
+✅ The multiplayer site is live; every item in spec §15.5 is ticked; the single-player tests still pass.
+- [ ] 🔍 Play a 2-player and a 3-player game with friends on one laptop or phone. Is the hand-off quick enough? Does anyone see a card they shouldn't?
+
 ---
 
 ## Optional extras (only after everything above is done) — not started

@@ -1,3 +1,4 @@
+import type { ReactNode } from 'react';
 import type { Advice } from '../agents/advisor';
 import type { PlayerView } from '../engine/types';
 import { renderAdvice } from '../explain/render';
@@ -13,6 +14,8 @@ interface Props {
   /** Tutorial: advice is always shown and asking is not needed. */
   alwaysOn?: boolean;
   disabled?: boolean;
+  /** Replaces the default explanation of what the Advisor uses. */
+  intro?: ReactNode;
 }
 
 export function AdviceCard({
@@ -46,7 +49,16 @@ export function AdviceCard({
   );
 }
 
-export function AdvisorPanel({ view, belief, advice, onAsk, hintsUsed = 0, alwaysOn, disabled }: Props) {
+export function AdvisorPanel({
+  view,
+  belief,
+  advice,
+  onAsk,
+  hintsUsed = 0,
+  alwaysOn,
+  disabled,
+  intro,
+}: Props) {
   return (
     <section className="advisor ticket" aria-labelledby="advisor-title">
       <h2 className="stamp" id="advisor-title">
@@ -62,8 +74,8 @@ export function AdvisorPanel({ view, belief, advice, onAsk, hintsUsed = 0, alway
       ) : (
         <div className="advisor__ask">
           <p className="muted">
-            The Advisor uses only what you can see (your card, the reveals and the trade feed) to say whether
-            to buy, sell or hold, and why.
+            {intro ??
+              'The Advisor uses only what you can see (your card, the reveals and the trade feed) to say whether to buy, sell or hold, and why.'}
           </p>
           {!alwaysOn && onAsk && (
             <button

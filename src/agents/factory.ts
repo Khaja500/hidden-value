@@ -1,5 +1,6 @@
 /** Builds the market maker for a game config, and games with their market maker. */
 import { Game, type GameHooks } from '../engine/game';
+import { MultiGame } from '../engine/multiGame';
 import type { GameConfig, MarketMaker } from '../engine/types';
 import type { LearnedModel } from './learnedPolicy';
 import learnedWeights from './learned-weights.json';
@@ -23,4 +24,8 @@ export function createMarketMaker(config: GameConfig): MarketMaker {
 
 export function createGame(config: GameConfig, hooks: GameHooks = {}): Game {
   return new Game(config, createMarketMaker(config), hooks);
+}
+
+export function createMultiGame(config: GameConfig): MultiGame {
+  return new MultiGame(config, createMarketMaker(config));
 }

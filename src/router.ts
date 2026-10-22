@@ -10,6 +10,7 @@ export interface Route {
 const PATTERNS: { pattern: string; name: string }[] = [
   { pattern: '/', name: 'home' },
   { pattern: '/play', name: 'play' },
+  { pattern: '/multiplayer', name: 'party' },
   { pattern: '/tutorial', name: 'tutorial' },
   { pattern: '/review/:gameId', name: 'review' },
   { pattern: '/review', name: 'reviewList' },

@@ -109,17 +109,20 @@ export class NaiveMM implements MarketMaker {
 /** "the last 2 buys had not happened", "your last sell had not happened", "the last two trades (…) had not happened". */
 export function describeRemoval(removed: MarketEvent[]): string {
   const acts = removed.filter((e) => e.kind === 'action');
+  // In multiplayer, name the player by seat ("player 2's"); in single-player games it is "your".
+  const whose = (e: (typeof acts)[number]) => (e.seat === undefined ? 'your' : `player ${e.seat + 1}'s`);
   if (acts.length === 1) {
     const e = acts[0];
     return e.taker === 'player'
-      ? `your last ${e.side} had not happened`
+      ? `${whose(e)} last ${e.side} had not happened`
       : `the last ${e.side} had not happened`;
   }
   const sameSide = acts.every((e) => e.side === acts[0].side);
   if (sameSide && acts.every((e) => e.taker === 'bot'))
     return `the last ${acts.length} ${acts[0].side}s had not happened`;
-  if (sameSide && acts.every((e) => e.taker === 'player'))
-    return `your last ${acts.length} ${acts[0].side}s had not happened`;
-  const label = (e: (typeof acts)[number]) => (e.taker === 'player' ? `your ${e.side}` : `a ${e.side}`);
+  if (sameSide && acts.every((e) => e.taker === 'player' && e.seat === acts[0].seat))
+    return `${whose(acts[0])} last ${acts.length} ${acts[0].side}s had not happened`;
+  const label = (e: (typeof acts)[number]) =>
+    e.taker === 'player' ? `${whose(e)} ${e.side}` : `a ${e.side}`;
   return `the last two trades (${acts.map(label).join(', then ')}) had not happened`;
 }

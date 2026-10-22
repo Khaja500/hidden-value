@@ -111,7 +111,8 @@ export class Advisor {
         this.withPrivate.reveal(e.position, rankOf(e.card));
         this.withoutPrivate.reveal(e.position, rankOf(e.card));
       } else if (e.kind === 'action' && e.taker === 'bot') {
-        // The player's own trades carry no information for the player.
+        // The player's own trades carry no information for the player. In multiplayer, reading the other
+        // players' trades is left to the players: the Advisor uses the bots' order flow only.
         this.withPrivate.observe(e);
         this.withoutPrivate.observe(e);
         if (e.side === 'buy') this.flow.buys++;
@@ -224,10 +225,12 @@ export function quantile(dist: readonly number[], p: number): number {
   return MAX_VALUE;
 }
 
-/** After 2+ consecutive same-side player trades, how far has the MM's mid moved since the first of them? */
+/** After 2+ consecutive same-side trades by this player, how far has the MM's mid moved since the first of them? */
 function adjustmentWarning(view: PlayerView): Advice['warning'] {
+  const seat = view.seat ?? 0;
   const trades = view.events.filter(
-    (e): e is ActionEvent => e.kind === 'action' && e.taker === 'player' && e.side !== 'pass',
+    (e): e is ActionEvent =>
+      e.kind === 'action' && e.taker === 'player' && (e.seat ?? 0) === seat && e.side !== 'pass',
   );
   if (trades.length < 2) return null;
   const side = trades[trades.length - 1].side as 'buy' | 'sell';
