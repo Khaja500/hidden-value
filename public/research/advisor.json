@@ -130,6 +130,40 @@
      "ok": true
     }
    ]
+  },
+  {
+   "difficulty": "expert",
+   "games": 2000,
+   "meanPnl": 9.864,
+   "ci95": 1.33486,
+   "winRate": 0.3965,
+   "winRateWhenTrading": 0.706144,
+   "tradesPerGame": 1.5675,
+   "unitsPerGame": 4.1865,
+   "mmPnl": 36.552,
+   "calibration": [
+    {
+     "n": 2121,
+     "meanPredicted": 0.669214,
+     "meanRealized": 0.66148,
+     "ci95": 0.0200236,
+     "ok": true
+    },
+    {
+     "n": 909,
+     "meanPredicted": 0.733962,
+     "meanRealized": 0.749175,
+     "ci95": 0.0287265,
+     "ok": true
+    },
+    {
+     "n": 94,
+     "meanPredicted": 0.838829,
+     "meanRealized": 0.734043,
+     "ci95": 0.0743314,
+     "ok": false
+    }
+   ]
   }
  ]
 }

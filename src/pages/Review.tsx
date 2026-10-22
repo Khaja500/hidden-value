@@ -409,7 +409,9 @@ function StepDetail({ step, privateCards }: { step: ReviewStep; privateCards: { 
 }
 
 function Components({ e }: { e: QuoteExplanation }) {
-  const rows: [string, number, number][] = [['Fair value μ', e.fairValue, e.fairValue]];
+  const rows: [string, number, number][] = [
+    [e.mmKind === 'analytical' ? 'Fair value μ' : 'Public-card value', e.fairValue, e.fairValue],
+  ];
   if (e.mmKind === 'analytical') {
     rows.push([
       'Adverse selection (Glosten–Milgrom)',
@@ -417,7 +419,7 @@ function Components({ e }: { e: QuoteExplanation }) {
       e.adverseSelection.askOffset,
     ]);
   }
-  if (e.mmKind === 'learned') rows.push(['Learned center offset', e.learnedOffset, e.learnedOffset]);
+  if (e.mmKind === 'learned') rows.push(['Learned centre offset', e.learnedOffset, e.learnedOffset]);
   if (e.mmKind === 'analytical') rows.push(['Inventory skew', e.inventory.skew, e.inventory.skew]);
   if (e.mmKind === 'analytical') rows.push(['Risk half-spread', -e.riskHalfSpread, e.riskHalfSpread]);
   if (e.fixedHalfSpread) {

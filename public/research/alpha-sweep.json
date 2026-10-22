@@ -207,6 +207,108 @@
    "maxAbsInventory": 12.4187,
    "finalAbsInventory": 10.535,
    "volume": 24.4625
+  },
+  {
+   "mm": "learned",
+   "alpha": 0,
+   "pnl": {
+    "mean": 30.5712,
+    "ci95": 1.41264,
+    "n": 800
+   },
+   "pnlSd": 20.3854,
+   "spread": 5.95437,
+   "lossToInformed": 0,
+   "gainFromNoise": 30.5712,
+   "meanAbsInventory": 1.27994,
+   "maxAbsInventory": 3.525,
+   "finalAbsInventory": 1.68875,
+   "volume": 13.6988
+  },
+  {
+   "mm": "learned",
+   "alpha": 0.1,
+   "pnl": {
+    "mean": 30.97,
+    "ci95": 1.41684,
+    "n": 800
+   },
+   "pnlSd": 20.4461,
+   "spread": 5.94937,
+   "lossToInformed": 5.21563,
+   "gainFromNoise": 36.1856,
+   "meanAbsInventory": 1.37792,
+   "maxAbsInventory": 3.71,
+   "finalAbsInventory": 1.65125,
+   "volume": 15.1713
+  },
+  {
+   "mm": "learned",
+   "alpha": 0.2,
+   "pnl": {
+    "mean": 31.3831,
+    "ci95": 1.51381,
+    "n": 800
+   },
+   "pnlSd": 21.8454,
+   "spread": 5.94502,
+   "lossToInformed": 7.1075,
+   "gainFromNoise": 38.4906,
+   "meanAbsInventory": 1.48059,
+   "maxAbsInventory": 3.9175,
+   "finalAbsInventory": 1.71375,
+   "volume": 16.4213
+  },
+  {
+   "mm": "learned",
+   "alpha": 0.3,
+   "pnl": {
+    "mean": 31.3481,
+    "ci95": 1.56273,
+    "n": 800
+   },
+   "pnlSd": 22.5514,
+   "spread": 5.94223,
+   "lossToInformed": 8.3125,
+   "gainFromNoise": 39.6606,
+   "meanAbsInventory": 1.62171,
+   "maxAbsInventory": 4.17875,
+   "finalAbsInventory": 1.86,
+   "volume": 17.8125
+  },
+  {
+   "mm": "learned",
+   "alpha": 0.4,
+   "pnl": {
+    "mean": 30.5906,
+    "ci95": 1.62474,
+    "n": 800
+   },
+   "pnlSd": 23.4463,
+   "spread": 5.93815,
+   "lossToInformed": 7.245,
+   "gainFromNoise": 37.8356,
+   "meanAbsInventory": 1.77934,
+   "maxAbsInventory": 4.4475,
+   "finalAbsInventory": 1.95375,
+   "volume": 18.7188
+  },
+  {
+   "mm": "learned",
+   "alpha": 0.5,
+   "pnl": {
+    "mean": 30.3944,
+    "ci95": 1.72101,
+    "n": 800
+   },
+   "pnlSd": 24.8354,
+   "spread": 5.93965,
+   "lossToInformed": 3.21188,
+   "gainFromNoise": 33.6063,
+   "meanAbsInventory": 1.90928,
+   "maxAbsInventory": 4.65125,
+   "finalAbsInventory": 2.09875,
+   "volume": 19.7013
   }
  ]
 }

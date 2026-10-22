@@ -19,7 +19,7 @@ function explanations(difficulty: Difficulty, seed: number): QuoteExplanation[] 
 }
 
 describe('quote decomposition', () => {
-  for (const difficulty of ['easy', 'medium', 'hard'] as Difficulty[]) {
+  for (const difficulty of ['easy', 'medium', 'hard', 'expert'] as Difficulty[]) {
     it(`components plus rounding add up exactly to every posted quote (${difficulty})`, () => {
       let checked = 0;
       for (let seed = 1; seed <= 12; seed++) {
@@ -41,6 +41,10 @@ describe('quote decomposition', () => {
             expect(e.adverseSelection.askOffset).toBeGreaterThanOrEqual(-TOL);
             expect(e.adverseSelection.bidOffset).toBeLessThanOrEqual(TOL);
             expect(e.riskHalfSpread).toBeGreaterThanOrEqual(0);
+          }
+          if (e.mmKind === 'learned') {
+            expect(e.learned).toBeDefined();
+            expect(e.fixedHalfSpread).toBeGreaterThan(0);
           }
           checked++;
         }

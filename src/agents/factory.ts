@@ -1,8 +1,14 @@
 /** Builds the market maker for a game config, and games with their market maker. */
 import { Game, type GameHooks } from '../engine/game';
 import type { GameConfig, MarketMaker } from '../engine/types';
+import type { LearnedModel } from './learnedPolicy';
+import learnedWeights from './learned-weights.json';
 import { AnalyticalMM, analyticalSettings } from './mmAnalytical';
+import { LearnedMM } from './mmLearned';
 import { NaiveMM } from './mmNaive';
+
+/** The trained Expert-mode policy (written by `npm run train`). */
+export const LEARNED_MODEL = learnedWeights as LearnedModel;
 
 export function createMarketMaker(config: GameConfig): MarketMaker {
   switch (config.mmKind) {
@@ -10,9 +16,8 @@ export function createMarketMaker(config: GameConfig): MarketMaker {
       return new NaiveMM(config.mm.inventoryOverride ?? null);
     case 'analytical':
       return new AnalyticalMM(analyticalSettings(config));
-    default:
-      // Placeholder until the learned market maker exists.
-      return new NaiveMM();
+    case 'learned':
+      return new LearnedMM(LEARNED_MODEL, config.mm.inventoryOverride ?? null);
   }
 }
 

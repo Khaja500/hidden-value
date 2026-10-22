@@ -1,4 +1,7 @@
-/** A small worker-thread pool: splits tasks into chunks and runs them on all cores. */
+/**
+ * A persistent worker-thread pool: tasks are split into chunks and run on all cores. Workers are created once per
+ * process and unref'd, so they never keep the process alive.
+ */
 import os from 'node:os';
 import { Worker } from 'node:worker_threads';
 
@@ -8,6 +11,33 @@ export interface PoolOptions {
   label?: string;
 }
 
+const workers: Worker[] = [];
+
+function getWorkers(n: number): Worker[] {
+  while (workers.length < n) {
+    const w = new Worker(new URL('./worker.ts', import.meta.url), { execArgv: ['--import', 'tsx'] });
+    w.unref();
+    workers.push(w);
+  }
+  return workers.slice(0, n);
+}
+
+function call<R>(w: Worker, kind: string, tasks: unknown[]): Promise<R[]> {
+  return new Promise<R[]>((resolve, reject) => {
+    const onMsg = (m: { results: R[] }) => {
+      w.off('error', onErr);
+      resolve(m.results);
+    };
+    const onErr = (e: Error) => {
+      w.off('message', onMsg);
+      reject(e);
+    };
+    w.once('message', onMsg);
+    w.once('error', onErr);
+    w.postMessage({ kind, tasks });
+  });
+}
+
 export async function runPool<T, R>(kind: string, tasks: T[], opts: PoolOptions = {}): Promise<R[]> {
   const nWorkers = Math.max(1, Math.min(opts.workers ?? os.cpus().length - 1, tasks.length));
   const chunk = opts.chunk ?? Math.max(1, Math.min(25, Math.ceil(tasks.length / (nWorkers * 4))));
@@ -15,35 +45,22 @@ export async function runPool<T, R>(kind: string, tasks: T[], opts: PoolOptions 
   let next = 0;
   let done = 0;
   const started = Date.now();
-  const workerUrl = new URL('./worker.ts', import.meta.url);
   const report = () => {
     if (!opts.label || !process.stderr.isTTY) return;
-    const s = (Date.now() - started) / 1000;
-    process.stderr.write(`\r${opts.label}: ${done}/${tasks.length} (${s.toFixed(0)}s)   `);
+    process.stderr.write(
+      `\r${opts.label}: ${done}/${tasks.length} (${((Date.now() - started) / 1000).toFixed(0)}s)   `,
+    );
   };
   await Promise.all(
-    Array.from({ length: nWorkers }, async () => {
-      const w = new Worker(workerUrl, { execArgv: ['--import', 'tsx'] });
-      try {
-        while (next < tasks.length) {
-          const start = next;
-          const batch = tasks.slice(start, start + chunk);
-          next += batch.length;
-          const out = await new Promise<R[]>((resolve, reject) => {
-            const onMsg = (m: { results: R[] }) => {
-              w.off('error', reject);
-              resolve(m.results);
-            };
-            w.once('message', onMsg);
-            w.once('error', reject);
-            w.postMessage({ kind, tasks: batch });
-          });
-          out.forEach((r, i) => (results[start + i] = r));
-          done += batch.length;
-          report();
-        }
-      } finally {
-        await w.terminate();
+    getWorkers(nWorkers).map(async (w) => {
+      while (next < tasks.length) {
+        const start = next;
+        const batch = tasks.slice(start, start + chunk);
+        next += batch.length;
+        const out = await call<R>(w, kind, batch);
+        out.forEach((r, i) => (results[start + i] = r));
+        done += batch.length;
+        report();
       }
     }),
   );

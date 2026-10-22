@@ -18,7 +18,7 @@ import type { SandboxRequest, SandboxResult } from '../sim/sandbox';
 import { callWorker } from '../workers/client';
 
 /** Market makers selectable in the Sandbox. */
-const SANDBOX_MMS: MMKind[] = ['naive', 'analytical'];
+const SANDBOX_MMS: MMKind[] = ['naive', 'analytical', 'learned'];
 const PARTICLES = 2000;
 
 function histogram(xs: number[], bins = 16) {

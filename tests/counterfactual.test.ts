@@ -9,8 +9,8 @@ import { randomAction } from './helpers';
 describe('counterfactual quotes', () => {
   it('equal what the MM actually produces when the state is replayed with that change', () => {
     let checked = 0;
-    for (let i = 0; i < 60; i++) {
-      const difficulty: Difficulty = (['easy', 'medium', 'hard'] as const)[i % 3];
+    for (let i = 0; i < 80; i++) {
+      const difficulty: Difficulty = (['easy', 'medium', 'hard', 'expert'] as const)[i % 4];
       const config = makeConfig(difficulty, hashSeed('cf', i), { mm: { particles: 1200 } });
       const game = createGame(config);
       const rng = new Rng(i);

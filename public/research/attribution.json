@@ -36,6 +36,22 @@
     "total": 3.45405
    },
    "spread": 5.64684
+  },
+  {
+   "mm": "learned",
+   "spreadCapture": 48.3689,
+   "adverseSelection": -17.6565,
+   "inventory": 27.2444,
+   "player": -21.6709,
+   "total": 36.2858,
+   "ci95": {
+    "spreadCapture": 1.73489,
+    "adverseSelection": 2.18493,
+    "inventory": 3.30337,
+    "player": 3.12528,
+    "total": 2.22799
+   },
+   "spread": 5.93913
   }
  ]
 }

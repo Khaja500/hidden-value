@@ -386,6 +386,14 @@ function AlphaSection() {
           const aLo = get('analytical', alphas[0]);
           const aHi = get('analytical', alphas[alphas.length - 1]);
           const lHi = get('learned', alphas[alphas.length - 1]);
+          const learnedPnls = alphas.map((a) => get('learned', a)?.pnl.mean ?? 0);
+          const learnedBeatsAll =
+            mms.includes('learned') &&
+            alphas.every(
+              (a) =>
+                (get('learned', a)?.pnl.mean ?? -Infinity) >
+                Math.max(get('naive', a)?.pnl.mean ?? -Infinity, get('analytical', a)?.pnl.mean ?? -Infinity),
+            );
           const charts: [string, string, (r: AlphaFile['rows'][number]) => number][] = [
             ['Market maker P&L per game', 'mean of games', (r) => r.pnl.mean],
             ['Average spread', 'ask − bid', (r) => r.spread],
@@ -456,8 +464,19 @@ function AlphaSection() {
                   {lHi && (
                     <>
                       {' '}
-                      The learned market maker earns {fmt(lHi.pnl.mean)} at α ={' '}
-                      {pct(alphas[alphas.length - 1])} with an average spread of {fmt(lHi.spread, 1)}.
+                      The learned market maker earns between {fmt(Math.min(...learnedPnls))} and{' '}
+                      {fmt(Math.max(...learnedPnls))} per game across the whole range
+                      {learnedBeatsAll ? ', more than both hand-built market makers at every α,' : ''} with a
+                      spread that stays near {fmt(lHi.spread, 1)} whatever α is. It cannot see α, so it
+                      settled on one spread and an aggressive inventory skew that work across the range.
+                      {aHi && lHi.lossToInformed > aHi.lossToInformed && (
+                        <>
+                          {' '}
+                          The price of not adapting is that it lets more value go to informed traders than the
+                          analytical market maker when α is high ({fmt(lHi.lossToInformed)} vs{' '}
+                          {fmt(aHi.lossToInformed)} at α = {pct(alphas[alphas.length - 1])}).
+                        </>
+                      )}
                     </>
                   )}
                 </p>
@@ -716,6 +735,7 @@ function AttributionSection() {
           const by = (m: MMKind) => d.rows.find((r) => r.mm === m);
           const n = by('naive');
           const a = by('analytical');
+          const l = by('learned');
           return (
             <ChartFrame
               title="Mean P&L per game, by source"
@@ -736,6 +756,15 @@ function AttributionSection() {
                     , while for the analytical one it is {ci(a.inventory, a.ci95.inventory)}.{' '}
                     {a.inventory - a.ci95.inventory > 0 &&
                       'After informed traders or the player push its inventory, the skew attracts noise traders on the other side while its fair value is still catching up, so inventory skew partly hedges adverse selection.'}
+                    {l && (
+                      <>
+                        {' '}
+                        The learned market maker takes this furthest: it captures less spread (
+                        {fmt(l.spreadCapture)}) but earns {ci(l.inventory, l.ci95.inventory)} on the inventory
+                        term, against {fmt(a?.inventory ?? 0)} for the analytical one. That is what lifts its
+                        total to {fmt(l.total)}: its aggressive skew turns noise traders into its hedge.
+                      </>
+                    )}
                   </p>
                 )
               }

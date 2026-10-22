@@ -91,7 +91,7 @@ If the session ends partway, start a new one with:
 ✅ Research page shows every §8.5 section from real simulation output; Sandbox runs; deployed.
 🔍 For each chart, make sure you can explain *why* the result happened. Ask Claude Code if not; you'll need this in interviews.
 
-### 9. Learned market maker
+### 9. Learned market maker — [x] done
 🤖
 - `npm run train`: Cross-Entropy Method training of the linear policy and the small MLP (≥ 3 seeds) per spec §6; save the best to `public/models/learned-mm.json`.
 - Partial-dependence plots, permutation importance, distillation fidelity; add to the Research page.

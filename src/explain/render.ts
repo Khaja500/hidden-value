@@ -72,11 +72,28 @@ export function renderExplanation(e: QuoteExplanation): RenderedExplanation {
     bullets.push('I ignore order flow and my own inventory.');
   } else {
     const why = reasons.length ? `: ${joinList(reasons.map(reasonText))}` : '';
-    bullets.push(`Fair value ${fmt(e.fairValue)}, ${dir}${dir === 'unchanged' ? '' : since}${why}.`);
+    const label = e.mmKind === 'learned' ? 'Public-card value' : 'Fair value';
+    bullets.push(`${label} ${fmt(e.fairValue)}, ${dir}${dir === 'unchanged' ? '' : since}${why}.`);
     const q = e.inventory.position;
-    if (e.mmKind === 'learned') {
+    if (e.mmKind === 'learned' && e.learned) {
+      const L = e.learned;
       bullets.push(
-        `My trained policy shifts the center ${signed(e.learnedOffset)} from the public-card value and sets a half-spread of ${fmt(e.fixedHalfSpread)}.`,
+        `My trained policy moves the centre ${signed(e.learnedOffset)} from the public-card value and quotes a half-spread of ${fmt(e.fixedHalfSpread)}.`,
+      );
+      const top = L.contributions
+        .filter((c) => Math.abs(c.offset) >= 0.05)
+        .sort((a, b) => Math.abs(b.offset) - Math.abs(a.offset))
+        .slice(0, 3)
+        .map((c) => `${c.feature.toLowerCase()} ${signed(c.offset)}`);
+      if (top.length) bullets.push(`Biggest pushes on the centre: ${joinList(top)}.`);
+      const topH = L.contributions
+        .filter((c) => Math.abs(c.halfSpread) >= 0.05)
+        .sort((a, b) => Math.abs(b.halfSpread) - Math.abs(a.halfSpread))
+        .slice(0, 2)
+        .map((c) => `${c.feature.toLowerCase()} ${signed(c.halfSpread)}`);
+      if (topH.length) bullets.push(`Biggest effects on the half-spread: ${joinList(topH)}.`);
+      bullets.push(
+        `Each unit of inventory moves my prices by ${signed(L.inventoryPerUnit, 2)} right now${q !== 0 ? ` (I hold ${q > 0 ? '+' : ''}${q})` : ''}. These reasons come from a linear model distilled from the policy (fidelity R² ${L.fidelity.toFixed(2)}).`,
       );
     } else if (q > 0) {
       bullets.push(

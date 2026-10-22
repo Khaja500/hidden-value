@@ -199,6 +199,8 @@ export interface QuoteExplanation {
     contributions: LearnedContribution[];
     distilledOffset: number;
     distilledHalfSpread: number;
+    /** How much one more unit of inventory moves both prices right now (distilled model). */
+    inventoryPerUnit: number;
   };
 }
 
