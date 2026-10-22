@@ -1,0 +1,104 @@
+{
+ "games": 800,
+ "particles": 5000,
+ "alpha": 0.25,
+ "seeds": "test",
+ "rows": [
+  {
+   "gamma": 0,
+   "pnl": {
+    "mean": 9.45,
+    "ci95": 5.19141,
+    "n": 800
+   },
+   "pnlSd": 74.916,
+   "spread": 3.44202,
+   "lossToInformed": 13.8344,
+   "gainFromNoise": 23.2844,
+   "meanAbsInventory": 5.78472,
+   "maxAbsInventory": 14.0625,
+   "finalAbsInventory": 12.2075,
+   "volume": 31.5725
+  },
+  {
+   "gamma": 0.0025,
+   "pnl": {
+    "mean": 16.8169,
+    "ci95": 4.44157,
+    "n": 800
+   },
+   "pnlSd": 64.0951,
+   "spread": 3.99513,
+   "lossToInformed": 11.0825,
+   "gainFromNoise": 27.8994,
+   "meanAbsInventory": 5.02961,
+   "maxAbsInventory": 12.4113,
+   "finalAbsInventory": 10.3863,
+   "volume": 29.5738
+  },
+  {
+   "gamma": 0.005,
+   "pnl": {
+    "mean": 21.9063,
+    "ci95": 4.01846,
+    "n": 800
+   },
+   "pnlSd": 57.9894,
+   "spread": 4.56228,
+   "lossToInformed": 9.27063,
+   "gainFromNoise": 31.1769,
+   "meanAbsInventory": 4.52836,
+   "maxAbsInventory": 11.16,
+   "finalAbsInventory": 8.9725,
+   "volume": 27.6375
+  },
+  {
+   "gamma": 0.01,
+   "pnl": {
+    "mean": 26.2237,
+    "ci95": 3.17219,
+    "n": 800
+   },
+   "pnlSd": 45.7771,
+   "spread": 5.68044,
+   "lossToInformed": 7.17687,
+   "gainFromNoise": 33.4006,
+   "meanAbsInventory": 3.57638,
+   "maxAbsInventory": 9.065,
+   "finalAbsInventory": 6.99375,
+   "volume": 23.8788
+  },
+  {
+   "gamma": 0.02,
+   "pnl": {
+    "mean": 26.7225,
+    "ci95": 2.16323,
+    "n": 800
+   },
+   "pnlSd": 31.217,
+   "spread": 8.01113,
+   "lossToInformed": 4.07,
+   "gainFromNoise": 30.7925,
+   "meanAbsInventory": 2.05138,
+   "maxAbsInventory": 5.92125,
+   "finalAbsInventory": 4.26625,
+   "volume": 16.8562
+  },
+  {
+   "gamma": 0.04,
+   "pnl": {
+    "mean": 14.1531,
+    "ci95": 1.12802,
+    "n": 800
+   },
+   "pnlSd": 16.2782,
+   "spread": 13.8758,
+   "lossToInformed": 1.6625,
+   "gainFromNoise": 15.8156,
+   "meanAbsInventory": 0.499743,
+   "maxAbsInventory": 2.48875,
+   "finalAbsInventory": 1.6225,
+   "volume": 6.11
+  }
+ ]
+}

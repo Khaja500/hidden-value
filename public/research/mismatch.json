@@ -1,0 +1,115 @@
+{
+ "games": 800,
+ "particles": 5000,
+ "seeds": "test",
+ "rows": [
+  {
+   "trueAlpha": 0.15,
+   "factor": 0.5,
+   "assumedAlpha": 0.075,
+   "pnl": {
+    "mean": 24.9262,
+    "ci95": 1.68545,
+    "n": 800
+   },
+   "pnlSd": 24.3223,
+   "spread": 3.94283,
+   "lossToInformed": 9.74563,
+   "gainFromNoise": 34.6719,
+   "meanAbsInventory": 1.88456,
+   "maxAbsInventory": 5.20875,
+   "finalAbsInventory": 2.97,
+   "volume": 25.4575
+  },
+  {
+   "trueAlpha": 0.15,
+   "factor": 1,
+   "assumedAlpha": 0.15,
+   "pnl": {
+    "mean": 22.8694,
+    "ci95": 2.28336,
+    "n": 800
+   },
+   "pnlSd": 32.9507,
+   "spread": 4.7746,
+   "lossToInformed": 8.88813,
+   "gainFromNoise": 31.7575,
+   "meanAbsInventory": 2.43759,
+   "maxAbsInventory": 6.55,
+   "finalAbsInventory": 4.23875,
+   "volume": 23.7512
+  },
+  {
+   "trueAlpha": 0.15,
+   "factor": 1.5,
+   "assumedAlpha": 0.225,
+   "pnl": {
+    "mean": 16.9237,
+    "ci95": 3.04107,
+    "n": 800
+   },
+   "pnlSd": 43.8849,
+   "spread": 5.46133,
+   "lossToInformed": 8.685,
+   "gainFromNoise": 25.6088,
+   "meanAbsInventory": 3.23035,
+   "maxAbsInventory": 8.35375,
+   "finalAbsInventory": 6.17375,
+   "volume": 22.8438
+  },
+  {
+   "trueAlpha": 0.35,
+   "factor": 0.5,
+   "assumedAlpha": 0.175,
+   "pnl": {
+    "mean": 34.9581,
+    "ci95": 2.53428,
+    "n": 800
+   },
+   "pnlSd": 36.5716,
+   "spread": 5.17805,
+   "lossToInformed": 4.20688,
+   "gainFromNoise": 39.165,
+   "meanAbsInventory": 2.95871,
+   "maxAbsInventory": 7.64875,
+   "finalAbsInventory": 5.355,
+   "volume": 25.5575
+  },
+  {
+   "trueAlpha": 0.35,
+   "factor": 1,
+   "assumedAlpha": 0.35,
+   "pnl": {
+    "mean": 27.3188,
+    "ci95": 3.49793,
+    "n": 800
+   },
+   "pnlSd": 50.4778,
+   "spread": 6.10632,
+   "lossToInformed": 1.39875,
+   "gainFromNoise": 28.7175,
+   "meanAbsInventory": 4.13333,
+   "maxAbsInventory": 10.565,
+   "finalAbsInventory": 8.58625,
+   "volume": 24.0963
+  },
+  {
+   "trueAlpha": 0.35,
+   "factor": 1.5,
+   "assumedAlpha": 0.525,
+   "pnl": {
+    "mean": 9.49812,
+    "ci95": 4.35242,
+    "n": 800
+   },
+   "pnlSd": 62.8087,
+   "spread": 7.44884,
+   "lossToInformed": 6.46312,
+   "gainFromNoise": 15.9612,
+   "meanAbsInventory": 4.31673,
+   "maxAbsInventory": 12.2287,
+   "finalAbsInventory": 10.5825,
+   "volume": 22.595
+  }
+ ]
+}

@@ -27,6 +27,12 @@
   --card-back-a: #263a5e;
   --card-back-b: #31497a;
   --focus: #2456b3;
+  /* Chart series (validated: dataviz validate_palette.js, all-pairs, light surface #fbf8f1). */
+  --series-naive: #1b9e77;
+  --series-analytical: #2456b3;
+  --series-learned: #b07a12;
+  --chart-grid: #e6dece;
+  --chart-axis: #8a8577;
   --shadow: 0 1px 0 rgba(28, 34, 48, 0.06), 0 6px 18px -10px rgba(28, 34, 48, 0.35);
   --shadow-lift: 0 2px 0 rgba(28, 34, 48, 0.08), 0 14px 30px -16px rgba(28, 34, 48, 0.45);
 
@@ -69,6 +75,11 @@
     --card-back-a: #2c3f63;
     --card-back-b: #3a5283;
     --focus: #8fb5ff;
+    --series-naive: #22a07a;
+    --series-analytical: #5b8de6;
+    --series-learned: #b9862a;
+    --chart-grid: #2a3240;
+    --chart-axis: #8d8a82;
     --shadow: 0 1px 0 rgba(0, 0, 0, 0.3), 0 8px 22px -12px rgba(0, 0, 0, 0.8);
     --shadow-lift: 0 2px 0 rgba(0, 0, 0, 0.35), 0 16px 34px -16px rgba(0, 0, 0, 0.9);
   }
@@ -102,6 +113,11 @@
   --card-back-a: #2c3f63;
   --card-back-b: #3a5283;
   --focus: #8fb5ff;
+  --series-naive: #22a07a;
+  --series-analytical: #5b8de6;
+  --series-learned: #b9862a;
+  --chart-grid: #2a3240;
+  --chart-axis: #8d8a82;
   --shadow: 0 1px 0 rgba(0, 0, 0, 0.3), 0 8px 22px -12px rgba(0, 0, 0, 0.8);
   --shadow-lift: 0 2px 0 rgba(0, 0, 0, 0.35), 0 16px 34px -16px rgba(0, 0, 0, 0.9);
 }

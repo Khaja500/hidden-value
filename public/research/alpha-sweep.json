@@ -1,0 +1,212 @@
+{
+ "games": 800,
+ "particles": 5000,
+ "seeds": "test",
+ "player": "passes",
+ "rows": [
+  {
+   "mm": "naive",
+   "alpha": 0,
+   "pnl": {
+    "mean": 33.95,
+    "ci95": 2.6806,
+    "n": 800
+   },
+   "pnlSd": 38.6831,
+   "spread": 6.34828,
+   "lossToInformed": 0,
+   "gainFromNoise": 33.95,
+   "meanAbsInventory": 2.53248,
+   "maxAbsInventory": 5.115,
+   "finalAbsInventory": 3.8725,
+   "volume": 10.3125
+  },
+  {
+   "mm": "naive",
+   "alpha": 0.1,
+   "pnl": {
+    "mean": 25.69,
+    "ci95": 2.87836,
+    "n": 800
+   },
+   "pnlSd": 41.5369,
+   "spread": 6.34828,
+   "lossToInformed": 4.99,
+   "gainFromNoise": 30.68,
+   "meanAbsInventory": 2.83608,
+   "maxAbsInventory": 5.625,
+   "finalAbsInventory": 4.1975,
+   "volume": 11.7125
+  },
+  {
+   "mm": "naive",
+   "alpha": 0.2,
+   "pnl": {
+    "mean": 18.7188,
+    "ci95": 3.23288,
+    "n": 800
+   },
+   "pnlSd": 46.6529,
+   "spread": 6.34828,
+   "lossToInformed": 8.78125,
+   "gainFromNoise": 27.5,
+   "meanAbsInventory": 3.25972,
+   "maxAbsInventory": 6.35375,
+   "finalAbsInventory": 4.98875,
+   "volume": 12.9388
+  },
+  {
+   "mm": "naive",
+   "alpha": 0.3,
+   "pnl": {
+    "mean": 9.22625,
+    "ci95": 3.76453,
+    "n": 800
+   },
+   "pnlSd": 54.325,
+   "spread": 6.34828,
+   "lossToInformed": 14.8006,
+   "gainFromNoise": 24.0269,
+   "meanAbsInventory": 3.8416,
+   "maxAbsInventory": 7.43375,
+   "finalAbsInventory": 6.1075,
+   "volume": 14.45
+  },
+  {
+   "mm": "naive",
+   "alpha": 0.4,
+   "pnl": {
+    "mean": -0.195625,
+    "ci95": 4.38546,
+    "n": 800
+   },
+   "pnlSd": 63.2855,
+   "spread": 6.34812,
+   "lossToInformed": 20.3944,
+   "gainFromNoise": 20.1988,
+   "meanAbsInventory": 4.50629,
+   "maxAbsInventory": 8.6375,
+   "finalAbsInventory": 7.39125,
+   "volume": 15.7688
+  },
+  {
+   "mm": "naive",
+   "alpha": 0.5,
+   "pnl": {
+    "mean": -8.33687,
+    "ci95": 4.9853,
+    "n": 800
+   },
+   "pnlSd": 71.9416,
+   "spread": 6.34748,
+   "lossToInformed": 24.6256,
+   "gainFromNoise": 16.2888,
+   "meanAbsInventory": 5.16897,
+   "maxAbsInventory": 9.85625,
+   "finalAbsInventory": 8.68625,
+   "volume": 17.1713
+  },
+  {
+   "mm": "analytical",
+   "alpha": 0,
+   "pnl": {
+    "mean": 28.5656,
+    "ci95": 1.61057,
+    "n": 800
+   },
+   "pnlSd": 23.2417,
+   "spread": 3.27021,
+   "lossToInformed": 0,
+   "gainFromNoise": 28.5656,
+   "meanAbsInventory": 1.76998,
+   "maxAbsInventory": 4.88375,
+   "finalAbsInventory": 2.4,
+   "volume": 25.0475
+  },
+  {
+   "mm": "analytical",
+   "alpha": 0.1,
+   "pnl": {
+    "mean": 22.7131,
+    "ci95": 1.89762,
+    "n": 800
+   },
+   "pnlSd": 27.384,
+   "spread": 4.19951,
+   "lossToInformed": 7.74437,
+   "gainFromNoise": 30.4575,
+   "meanAbsInventory": 2.01042,
+   "maxAbsInventory": 5.5375,
+   "finalAbsInventory": 3.33875,
+   "volume": 24.1687
+  },
+  {
+   "mm": "analytical",
+   "alpha": 0.2,
+   "pnl": {
+    "mean": 23.5175,
+    "ci95": 2.9658,
+    "n": 800
+   },
+   "pnlSd": 42.7988,
+   "spread": 5.30201,
+   "lossToInformed": 8.40062,
+   "gainFromNoise": 31.9181,
+   "meanAbsInventory": 3.07816,
+   "maxAbsInventory": 8.0375,
+   "finalAbsInventory": 5.72875,
+   "volume": 23.6612
+  },
+  {
+   "mm": "analytical",
+   "alpha": 0.3,
+   "pnl": {
+    "mean": 25.6544,
+    "ci95": 3.34273,
+    "n": 800
+   },
+   "pnlSd": 48.2381,
+   "spread": 5.88962,
+   "lossToInformed": 5.25125,
+   "gainFromNoise": 30.9056,
+   "meanAbsInventory": 3.87186,
+   "maxAbsInventory": 9.7925,
+   "finalAbsInventory": 7.6375,
+   "volume": 24.17
+  },
+  {
+   "mm": "analytical",
+   "alpha": 0.4,
+   "pnl": {
+    "mean": 27.0325,
+    "ci95": 3.69513,
+    "n": 800
+   },
+   "pnlSd": 53.3235,
+   "spread": 6.29503,
+   "lossToInformed": -0.774375,
+   "gainFromNoise": 26.2581,
+   "meanAbsInventory": 4.23432,
+   "maxAbsInventory": 11.2263,
+   "finalAbsInventory": 9.39875,
+   "volume": 24.1663
+  },
+  {
+   "mm": "analytical",
+   "alpha": 0.5,
+   "pnl": {
+    "mean": 23.2587,
+    "ci95": 3.97854,
+    "n": 800
+   },
+   "pnlSd": 57.4133,
+   "spread": 7.03259,
+   "lossToInformed": -3.51625,
+   "gainFromNoise": 19.7425,
+   "meanAbsInventory": 4.56392,
+   "maxAbsInventory": 12.4187,
+   "finalAbsInventory": 10.535,
+   "volume": 24.4625
+  }
+ ]
+}

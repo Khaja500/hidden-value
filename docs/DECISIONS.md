@@ -85,3 +85,15 @@ No `frontend-design` skill was available in this environment, so this plan is wr
 - **Tutorial deal:** seed 1757224188, found by searching for a deal where you hold a King, the Advisor says BUY on the first step, and the reveals go both ways (Q, then 5 and 4). All tip text is filled in from the live game state, so it stays true whatever the player does.
 - **Focus after mouse clicks:** order buttons drop focus after a mouse click (`event.detail > 0`). Otherwise Space, the pass shortcut, would re-press the focused Buy button. Keyboard activation keeps focus.
 - **Pages show the game only while it is running or just finished there.** Coming back to Play / Daily / Tutorial after a finished game shows the picker, leaderboard or lessons again.
+
+## Simulations and Research page (step 8)
+
+- **All reported numbers use test seeds** (`hash("test", i)`), with the same deals for every cell of a sweep, so differences between market makers are paired comparisons. Runs: `npm run sim -- --exp <calibration|alpha|gamma|mismatch|ablations|attribution|faithfulness|advisor>`. Each writes JSON to `public/research/` and runs on all cores via worker threads.
+- **P&L attribution** splits each trade's P&L exactly into spread captured against the MM's own fair value at the time, plus value drift against that fair value, booked by counterparty: informed bots ("adverse selection"), noise bots ("inventory drift") and the player.
+- **Findings the conclusions report as they are, even where they cut against the design:**
+  - Underestimating α by 50% _raises_ the analytical MM's profit, and overestimating it cuts profit sharply. The Glosten–Milgrom spread is a zero-profit spread, and the risk half-spread sits on top of it, so the total spread is already on the wide side of profit-maximising.
+  - γ = 0.02 earns slightly more than the game's γ = 0.01 with less risk, but quotes an 8.0 spread instead of 5.7. The game keeps 0.01 for playability, and the Research page says so.
+  - For the analytical MM the noise-trade "inventory drift" is significantly positive (+5.9 ± 3.3 per game). Its skew attracts noise flow on the other side after informed or player trades move its inventory, which partly hedges adverse selection. For the naive MM it is indistinguishable from zero.
+- **Conclusions are generated from the JSON**, so re-running an experiment cannot leave stale numbers in the text.
+- **Chart colours:** the series palette (naive green, analytical cobalt, learned brass) passed the dataviz skill's validator on all pairs, in light and dark mode against the site's surfaces. Every chart has a table-view twin, and tooltips never gate a value.
+- **Sandbox** runs in the Web Worker with 2,000 particles per filter for speed, on numbered "deal sets" so two runs with different settings see the same deals.

@@ -82,7 +82,7 @@ If the session ends partway, start a new one with:
 ✅ Tutorial completes end to end; Review works for any finished game; deployed.
 🔍 Send the link to 2–3 friends with no explanation beyond the tutorial and watch where they get confused.
 
-### 8. Simulations and Research page
+### 8. Simulations and Research page — [x] done
 🤖
 - `npm run sim` experiments from spec §8: α sweep, γ sweep, model mismatch, P&L attribution, ablations, counterfactual accuracy, Advisor attribution, Advisor results and calibration. Write JSON to `public/research/`.
 - Research page rendering every chart and table with short conclusions.

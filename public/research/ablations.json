@@ -1,0 +1,76 @@
+{
+ "games": 800,
+ "particles": 5000,
+ "alpha": 0.25,
+ "seeds": "test",
+ "rows": [
+  {
+   "variant": "Full analytical MM",
+   "claim": "",
+   "pnl": {
+    "mean": 26.2237,
+    "ci95": 3.17219,
+    "n": 800
+   },
+   "pnlSd": 45.7771,
+   "spread": 5.68044,
+   "lossToInformed": 7.17687,
+   "gainFromNoise": 33.4006,
+   "meanAbsInventory": 3.57638,
+   "maxAbsInventory": 9.065,
+   "finalAbsInventory": 6.99375,
+   "volume": 23.8788
+  },
+  {
+   "variant": "No inventory skew",
+   "claim": "inventory variability rises",
+   "pnl": {
+    "mean": 26.2,
+    "ci95": 5.15545,
+    "n": 800
+   },
+   "pnlSd": 74.397,
+   "spread": 5.7026,
+   "lossToInformed": 6.195,
+   "gainFromNoise": 32.395,
+   "meanAbsInventory": 5.42774,
+   "maxAbsInventory": 13.6375,
+   "finalAbsInventory": 12.1587,
+   "volume": 24.8987
+  },
+  {
+   "variant": "No adverse-selection spread",
+   "claim": "losses to informed traders rise",
+   "pnl": {
+    "mean": 8.1525,
+    "ci95": 2.58606,
+    "n": 800
+   },
+   "pnlSd": 37.3188,
+   "spread": 2.7796,
+   "lossToInformed": 17.575,
+   "gainFromNoise": 25.7275,
+   "meanAbsInventory": 2.97437,
+   "maxAbsInventory": 8.02875,
+   "finalAbsInventory": 5.53,
+   "volume": 32.1425
+  },
+  {
+   "variant": "No risk half-spread",
+   "claim": "profit from noise traders falls",
+   "pnl": {
+    "mean": 4.43313,
+    "ci95": 3.28082,
+    "n": 800
+   },
+   "pnlSd": 47.3446,
+   "spread": 3.46129,
+   "lossToInformed": 17.46,
+   "gainFromNoise": 21.8931,
+   "meanAbsInventory": 3.70222,
+   "maxAbsInventory": 9.34625,
+   "finalAbsInventory": 6.815,
+   "volume": 31.1625
+  }
+ ]
+}

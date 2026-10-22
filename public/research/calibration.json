@@ -1,0 +1,273 @@
+{
+ "games": 2000,
+ "particles": 5000,
+ "alpha": 0.35,
+ "mm": {
+  "meanBuckets": [
+   {
+    "n": 200,
+    "meanPredicted": 24.8957,
+    "meanRealized": 24.65,
+    "ci95": 0.706381,
+    "ok": true
+   },
+   {
+    "n": 200,
+    "meanPredicted": 29.1708,
+    "meanRealized": 28.655,
+    "ci95": 0.810466,
+    "ok": true
+   },
+   {
+    "n": 200,
+    "meanPredicted": 31.4658,
+    "meanRealized": 31.58,
+    "ci95": 0.79626,
+    "ok": true
+   },
+   {
+    "n": 200,
+    "meanPredicted": 33.3372,
+    "meanRealized": 33.1,
+    "ci95": 0.790254,
+    "ok": true
+   },
+   {
+    "n": 200,
+    "meanPredicted": 34.6649,
+    "meanRealized": 34.65,
+    "ci95": 0.939546,
+    "ok": true
+   },
+   {
+    "n": 200,
+    "meanPredicted": 35.2443,
+    "meanRealized": 34.86,
+    "ci95": 1.03397,
+    "ok": true
+   },
+   {
+    "n": 200,
+    "meanPredicted": 36.4017,
+    "meanRealized": 36.58,
+    "ci95": 0.834496,
+    "ok": true
+   },
+   {
+    "n": 200,
+    "meanPredicted": 38.3517,
+    "meanRealized": 38.555,
+    "ci95": 0.78384,
+    "ok": true
+   },
+   {
+    "n": 200,
+    "meanPredicted": 40.5676,
+    "meanRealized": 39.955,
+    "ci95": 0.932798,
+    "ok": true
+   },
+   {
+    "n": 200,
+    "meanPredicted": 44.9464,
+    "meanRealized": 44.67,
+    "ci95": 0.785735,
+    "ok": true
+   }
+  ],
+  "probBuckets": [
+   {
+    "n": 118,
+    "meanPredicted": 0.158914,
+    "meanRealized": 0.194915,
+    "ci95": 0.0659654,
+    "ok": true
+   },
+   {
+    "n": 326,
+    "meanPredicted": 0.25853,
+    "meanRealized": 0.205521,
+    "ci95": 0.047528,
+    "ok": false
+   },
+   {
+    "n": 348,
+    "meanPredicted": 0.349746,
+    "meanRealized": 0.353448,
+    "ci95": 0.0501054,
+    "ok": true
+   },
+   {
+    "n": 298,
+    "meanPredicted": 0.45488,
+    "meanRealized": 0.473154,
+    "ci95": 0.0565383,
+    "ok": true
+   },
+   {
+    "n": 327,
+    "meanPredicted": 0.551168,
+    "meanRealized": 0.535168,
+    "ci95": 0.0539096,
+    "ok": true
+   },
+   {
+    "n": 369,
+    "meanPredicted": 0.647786,
+    "meanRealized": 0.650407,
+    "ci95": 0.0487374,
+    "ok": true
+   },
+   {
+    "n": 176,
+    "meanPredicted": 0.742229,
+    "meanRealized": 0.710227,
+    "ci95": 0.0646228,
+    "ok": true
+   }
+  ],
+  "r2": 0.463525,
+  "rmse": 5.9792
+ },
+ "player": {
+  "meanBuckets": [
+   {
+    "n": 200,
+    "meanPredicted": 23.9801,
+    "meanRealized": 24.08,
+    "ci95": 0.656318,
+    "ok": true
+   },
+   {
+    "n": 200,
+    "meanPredicted": 28.4848,
+    "meanRealized": 28.135,
+    "ci95": 0.733586,
+    "ok": true
+   },
+   {
+    "n": 200,
+    "meanPredicted": 30.6592,
+    "meanRealized": 30.375,
+    "ci95": 0.690025,
+    "ok": true
+   },
+   {
+    "n": 200,
+    "meanPredicted": 32.3599,
+    "meanRealized": 32.15,
+    "ci95": 0.850579,
+    "ok": true
+   },
+   {
+    "n": 200,
+    "meanPredicted": 33.9299,
+    "meanRealized": 33.285,
+    "ci95": 0.743869,
+    "ok": true
+   },
+   {
+    "n": 200,
+    "meanPredicted": 35.5509,
+    "meanRealized": 35.78,
+    "ci95": 0.77261,
+    "ok": true
+   },
+   {
+    "n": 200,
+    "meanPredicted": 37.2623,
+    "meanRealized": 36.98,
+    "ci95": 0.819039,
+    "ok": true
+   },
+   {
+    "n": 200,
+    "meanPredicted": 39.0817,
+    "meanRealized": 39.345,
+    "ci95": 0.693535,
+    "ok": true
+   },
+   {
+    "n": 200,
+    "meanPredicted": 41.2112,
+    "meanRealized": 41.69,
+    "ci95": 0.717315,
+    "ok": true
+   },
+   {
+    "n": 200,
+    "meanPredicted": 45.6686,
+    "meanRealized": 45.435,
+    "ci95": 0.798586,
+    "ok": true
+   }
+  ],
+  "probBuckets": [
+   {
+    "n": 47,
+    "meanPredicted": 0.0411835,
+    "meanRealized": 0.0212766,
+    "ci95": 0.0568115,
+    "ok": true
+   },
+   {
+    "n": 156,
+    "meanPredicted": 0.158256,
+    "meanRealized": 0.153846,
+    "ci95": 0.0572748,
+    "ok": true
+   },
+   {
+    "n": 304,
+    "meanPredicted": 0.251928,
+    "meanRealized": 0.246711,
+    "ci95": 0.048801,
+    "ok": true
+   },
+   {
+    "n": 308,
+    "meanPredicted": 0.349359,
+    "meanRealized": 0.340909,
+    "ci95": 0.053246,
+    "ok": true
+   },
+   {
+    "n": 297,
+    "meanPredicted": 0.448731,
+    "meanRealized": 0.420875,
+    "ci95": 0.0565656,
+    "ok": true
+   },
+   {
+    "n": 275,
+    "meanPredicted": 0.550064,
+    "meanRealized": 0.552727,
+    "ci95": 0.0587992,
+    "ok": true
+   },
+   {
+    "n": 330,
+    "meanPredicted": 0.649963,
+    "meanRealized": 0.654545,
+    "ci95": 0.0514636,
+    "ok": true
+   },
+   {
+    "n": 190,
+    "meanPredicted": 0.742488,
+    "meanRealized": 0.731579,
+    "ci95": 0.062176,
+    "ok": true
+   },
+   {
+    "n": 76,
+    "meanPredicted": 0.835846,
+    "meanRealized": 0.776316,
+    "ci95": 0.0832796,
+    "ok": true
+   }
+  ],
+  "r2": 0.586801,
+  "rmse": 5.24744
+ }
+}

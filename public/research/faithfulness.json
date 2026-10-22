@@ -1,0 +1,817 @@
+{
+ "counterfactual": {
+  "states": 1000,
+  "checked": 1889,
+  "matched": 1889,
+  "maxAbsDiff": 0
+ },
+ "advisorAttribution": {
+  "states": 1000,
+  "meanAbsClaimed": 2.92793,
+  "meanAbsDiff": 0.138978,
+  "p95AbsDiff": 0.36956,
+  "within05": 0.98,
+  "sample": [
+   {
+    "claimed": -11.0185,
+    "independent": -11.1663
+   },
+   {
+    "claimed": -5.41114,
+    "independent": -5.7272
+   },
+   {
+    "claimed": -1.65187,
+    "independent": -1.39896
+   },
+   {
+    "claimed": -6.86244,
+    "independent": -6.92253
+   },
+   {
+    "claimed": -4.75578,
+    "independent": -4.99426
+   },
+   {
+    "claimed": -0.00390444,
+    "independent": 0.367564
+   },
+   {
+    "claimed": -3.55638,
+    "independent": -3.61703
+   },
+   {
+    "claimed": -1.42527,
+    "independent": -1.32142
+   },
+   {
+    "claimed": 0.630207,
+    "independent": 0.866384
+   },
+   {
+    "claimed": 9.18632,
+    "independent": 9.10047
+   },
+   {
+    "claimed": 2.48926,
+    "independent": 2.88368
+   },
+   {
+    "claimed": 2.43201,
+    "independent": 2.54792
+   },
+   {
+    "claimed": -0.275161,
+    "independent": -0.424857
+   },
+   {
+    "claimed": 3.7555,
+    "independent": 3.76679
+   },
+   {
+    "claimed": -1.97673,
+    "independent": -2.08132
+   },
+   {
+    "claimed": 2.44473,
+    "independent": 2.513
+   },
+   {
+    "claimed": -2.28109,
+    "independent": -2.28929
+   },
+   {
+    "claimed": -1.83338,
+    "independent": -1.90933
+   },
+   {
+    "claimed": 0.0867292,
+    "independent": 0.276954
+   },
+   {
+    "claimed": 1.38983,
+    "independent": 1.41321
+   },
+   {
+    "claimed": 1.42215,
+    "independent": 1.4377
+   },
+   {
+    "claimed": -6.75493,
+    "independent": -6.53282
+   },
+   {
+    "claimed": -6.79032,
+    "independent": -6.61339
+   },
+   {
+    "claimed": 2.60899,
+    "independent": 2.66387
+   },
+   {
+    "claimed": 5.24888,
+    "independent": 5.37212
+   },
+   {
+    "claimed": -1.11587,
+    "independent": -1.09939
+   },
+   {
+    "claimed": 2.4331,
+    "independent": 2.94708
+   },
+   {
+    "claimed": -0.244953,
+    "independent": -0.470272
+   },
+   {
+    "claimed": 5.34691,
+    "independent": 5.4527
+   },
+   {
+    "claimed": -0.669523,
+    "independent": -0.686831
+   },
+   {
+    "claimed": -2.34854,
+    "independent": -2.44507
+   },
+   {
+    "claimed": -2.66291,
+    "independent": -2.35966
+   },
+   {
+    "claimed": -1.97957,
+    "independent": -1.7973
+   },
+   {
+    "claimed": -3.51119,
+    "independent": -3.70569
+   },
+   {
+    "claimed": -4.79739,
+    "independent": -4.61794
+   },
+   {
+    "claimed": 6.45423,
+    "independent": 6.05037
+   },
+   {
+    "claimed": 1.26705,
+    "independent": 1.33557
+   },
+   {
+    "claimed": -2.28725,
+    "independent": -2.30323
+   },
+   {
+    "claimed": 2.0866,
+    "independent": 2.22934
+   },
+   {
+    "claimed": 6.73451,
+    "independent": 7.0984
+   },
+   {
+    "claimed": -1.24095,
+    "independent": -1.19917
+   },
+   {
+    "claimed": -2.89778,
+    "independent": -2.96855
+   },
+   {
+    "claimed": 5.06582,
+    "independent": 5.2607
+   },
+   {
+    "claimed": -5.46945,
+    "independent": -5.23591
+   },
+   {
+    "claimed": -3.20644,
+    "independent": -2.89418
+   },
+   {
+    "claimed": -6.8014,
+    "independent": -6.67602
+   },
+   {
+    "claimed": -3.10638,
+    "independent": -3.13083
+   },
+   {
+    "claimed": -1.84572,
+    "independent": -1.47805
+   },
+   {
+    "claimed": -5.28196,
+    "independent": -5.044
+   },
+   {
+    "claimed": 3.0101,
+    "independent": 3.12188
+   },
+   {
+    "claimed": -1.69212,
+    "independent": -1.64632
+   },
+   {
+    "claimed": -0.552544,
+    "independent": -0.610936
+   },
+   {
+    "claimed": 2.64795,
+    "independent": 2.54807
+   },
+   {
+    "claimed": -3.31056,
+    "independent": -3.3583
+   },
+   {
+    "claimed": -4.20366,
+    "independent": -4.21301
+   },
+   {
+    "claimed": 4.45579,
+    "independent": 4.36009
+   },
+   {
+    "claimed": 4.00207,
+    "independent": 4.06112
+   },
+   {
+    "claimed": -8.18927,
+    "independent": -8.17501
+   },
+   {
+    "claimed": -4.46722,
+    "independent": -4.5399
+   },
+   {
+    "claimed": -2.17436,
+    "independent": -1.81597
+   },
+   {
+    "claimed": -0.34628,
+    "independent": -0.450779
+   },
+   {
+    "claimed": -1.57636,
+    "independent": -1.56247
+   },
+   {
+    "claimed": -2.81016,
+    "independent": -2.82918
+   },
+   {
+    "claimed": -2.0823,
+    "independent": -1.72892
+   },
+   {
+    "claimed": -1.97695,
+    "independent": -1.58271
+   },
+   {
+    "claimed": 0.764852,
+    "independent": 0.725361
+   },
+   {
+    "claimed": -2.48602,
+    "independent": -2.19039
+   },
+   {
+    "claimed": 2.06801,
+    "independent": 2.0132
+   },
+   {
+    "claimed": -3.49304,
+    "independent": -3.54829
+   },
+   {
+    "claimed": 1.34547,
+    "independent": 1.54367
+   },
+   {
+    "claimed": -2.97549,
+    "independent": -3.08246
+   },
+   {
+    "claimed": -2.63802,
+    "independent": -2.37426
+   },
+   {
+    "claimed": 0.407905,
+    "independent": 0.331941
+   },
+   {
+    "claimed": -1.17618,
+    "independent": -1.26362
+   },
+   {
+    "claimed": -2.81846,
+    "independent": -3.11406
+   },
+   {
+    "claimed": 2.24852,
+    "independent": 2.29068
+   },
+   {
+    "claimed": 0.2082,
+    "independent": 0.0476544
+   },
+   {
+    "claimed": -3.50161,
+    "independent": -3.61821
+   },
+   {
+    "claimed": -1.94382,
+    "independent": -1.79753
+   },
+   {
+    "claimed": 4.39497,
+    "independent": 4.71298
+   },
+   {
+    "claimed": 0.459612,
+    "independent": 0.389808
+   },
+   {
+    "claimed": 2.0925,
+    "independent": 2.07008
+   },
+   {
+    "claimed": -3.98338,
+    "independent": -3.94929
+   },
+   {
+    "claimed": 1.693,
+    "independent": 1.63411
+   },
+   {
+    "claimed": 6.7748,
+    "independent": 6.70949
+   },
+   {
+    "claimed": 6.29053,
+    "independent": 6.31354
+   },
+   {
+    "claimed": 3.82226,
+    "independent": 3.63677
+   },
+   {
+    "claimed": -3.62361,
+    "independent": -3.59279
+   },
+   {
+    "claimed": 5.10263,
+    "independent": 5.31866
+   },
+   {
+    "claimed": -2.66075,
+    "independent": -2.78619
+   },
+   {
+    "claimed": -4.09842,
+    "independent": -3.98782
+   },
+   {
+    "claimed": -0.0593615,
+    "independent": -0.16488
+   },
+   {
+    "claimed": -2.94005,
+    "independent": -2.96508
+   },
+   {
+    "claimed": -0.340783,
+    "independent": 0.173093
+   },
+   {
+    "claimed": 3.96049,
+    "independent": 4.15203
+   },
+   {
+    "claimed": -0.251919,
+    "independent": -0.788304
+   },
+   {
+    "claimed": -6.89654,
+    "independent": -7.01127
+   },
+   {
+    "claimed": 3.96876,
+    "independent": 3.94437
+   },
+   {
+    "claimed": 1.59506,
+    "independent": 1.56571
+   },
+   {
+    "claimed": 1.24325,
+    "independent": 1.52646
+   },
+   {
+    "claimed": 0.616042,
+    "independent": 0.544725
+   },
+   {
+    "claimed": -4.01005,
+    "independent": -4.1314
+   },
+   {
+    "claimed": 1.85506,
+    "independent": 1.52625
+   },
+   {
+    "claimed": 2.89748,
+    "independent": 2.80251
+   },
+   {
+    "claimed": 1.91232,
+    "independent": 2.10763
+   },
+   {
+    "claimed": 8.41323,
+    "independent": 8.41913
+   },
+   {
+    "claimed": 3.7181,
+    "independent": 3.7749
+   },
+   {
+    "claimed": -6.99809,
+    "independent": -6.36451
+   },
+   {
+    "claimed": 7.69303,
+    "independent": 7.76451
+   },
+   {
+    "claimed": -3.45231,
+    "independent": -3.57959
+   },
+   {
+    "claimed": 0.806198,
+    "independent": 0.956418
+   },
+   {
+    "claimed": 6.36049,
+    "independent": 6.52305
+   },
+   {
+    "claimed": -3.29553,
+    "independent": -3.07452
+   },
+   {
+    "claimed": 2.41096,
+    "independent": 2.03603
+   },
+   {
+    "claimed": -2.3292,
+    "independent": -2.22492
+   },
+   {
+    "claimed": -2.4949,
+    "independent": -2.64986
+   },
+   {
+    "claimed": -0.64381,
+    "independent": -0.559147
+   },
+   {
+    "claimed": -1.03472,
+    "independent": -1.01135
+   },
+   {
+    "claimed": 0.338266,
+    "independent": 0.614558
+   },
+   {
+    "claimed": 1.29919,
+    "independent": 1.16872
+   },
+   {
+    "claimed": 0.991304,
+    "independent": 0.939814
+   },
+   {
+    "claimed": -1.96121,
+    "independent": -1.8681
+   },
+   {
+    "claimed": 0.417235,
+    "independent": 0.277006
+   },
+   {
+    "claimed": 1.30939,
+    "independent": 1.51886
+   },
+   {
+    "claimed": 3.35848,
+    "independent": 3.32139
+   },
+   {
+    "claimed": -2.02367,
+    "independent": -2.17114
+   },
+   {
+    "claimed": 4.11873,
+    "independent": 4.27862
+   },
+   {
+    "claimed": 1.37198,
+    "independent": 1.4886
+   },
+   {
+    "claimed": -4.95385,
+    "independent": -5.01018
+   },
+   {
+    "claimed": 3.79776,
+    "independent": 4.36604
+   },
+   {
+    "claimed": -2.8329,
+    "independent": -2.61765
+   },
+   {
+    "claimed": -1.71898,
+    "independent": -2.17347
+   },
+   {
+    "claimed": 1.02343,
+    "independent": 1.12785
+   },
+   {
+    "claimed": -0.855782,
+    "independent": -0.666186
+   },
+   {
+    "claimed": 4.63834,
+    "independent": 4.77135
+   },
+   {
+    "claimed": 0.559704,
+    "independent": 0.888027
+   },
+   {
+    "claimed": -1.99097,
+    "independent": -2.04459
+   },
+   {
+    "claimed": 2.2122,
+    "independent": 2.42264
+   },
+   {
+    "claimed": -4.82663,
+    "independent": -4.93304
+   },
+   {
+    "claimed": -0.103422,
+    "independent": -0.125807
+   },
+   {
+    "claimed": -1.17522,
+    "independent": -1.05461
+   },
+   {
+    "claimed": 2.60154,
+    "independent": 2.59055
+   },
+   {
+    "claimed": -0.2739,
+    "independent": -0.307552
+   },
+   {
+    "claimed": 2.83182,
+    "independent": 2.93627
+   },
+   {
+    "claimed": -3.21871,
+    "independent": -3.11304
+   },
+   {
+    "claimed": -5.2309,
+    "independent": -5.16073
+   },
+   {
+    "claimed": 2.85596,
+    "independent": 2.86415
+   },
+   {
+    "claimed": -7.63436,
+    "independent": -7.61874
+   },
+   {
+    "claimed": 3.39443,
+    "independent": 3.44376
+   },
+   {
+    "claimed": -0.358669,
+    "independent": -0.430233
+   },
+   {
+    "claimed": -7.94673,
+    "independent": -7.94275
+   },
+   {
+    "claimed": -1.25236,
+    "independent": -1.51853
+   },
+   {
+    "claimed": -2.88547,
+    "independent": -3.07006
+   },
+   {
+    "claimed": -1.80709,
+    "independent": -1.79912
+   },
+   {
+    "claimed": -1.16056,
+    "independent": -1.15138
+   },
+   {
+    "claimed": 3.50922,
+    "independent": 3.27689
+   },
+   {
+    "claimed": -1.74219,
+    "independent": -1.61503
+   },
+   {
+    "claimed": -3.58329,
+    "independent": -3.59592
+   },
+   {
+    "claimed": -2.42683,
+    "independent": -2.29288
+   },
+   {
+    "claimed": 4.85644,
+    "independent": 5.08681
+   },
+   {
+    "claimed": -0.788953,
+    "independent": -0.831939
+   },
+   {
+    "claimed": 0.203075,
+    "independent": -0.103546
+   },
+   {
+    "claimed": 1.46872,
+    "independent": 1.56636
+   },
+   {
+    "claimed": -3.27136,
+    "independent": -3.46932
+   },
+   {
+    "claimed": 2.28965,
+    "independent": 2.17091
+   },
+   {
+    "claimed": 1.51018,
+    "independent": 1.84611
+   },
+   {
+    "claimed": 5.86887,
+    "independent": 5.05133
+   },
+   {
+    "claimed": -1.5203,
+    "independent": -1.6702
+   },
+   {
+    "claimed": 4.1439,
+    "independent": 3.83493
+   },
+   {
+    "claimed": 3.55759,
+    "independent": 3.63006
+   },
+   {
+    "claimed": 5.01564,
+    "independent": 4.81955
+   },
+   {
+    "claimed": -1.57327,
+    "independent": -1.75707
+   },
+   {
+    "claimed": -0.183904,
+    "independent": 0.100026
+   },
+   {
+    "claimed": 4.49789,
+    "independent": 4.63503
+   },
+   {
+    "claimed": -1.67565,
+    "independent": -1.67815
+   },
+   {
+    "claimed": -1.47053,
+    "independent": -1.22957
+   },
+   {
+    "claimed": 1.41025,
+    "independent": 1.26687
+   },
+   {
+    "claimed": 7.39419,
+    "independent": 7.45788
+   },
+   {
+    "claimed": -2.5059,
+    "independent": -2.23172
+   },
+   {
+    "claimed": 2.76247,
+    "independent": 2.53058
+   },
+   {
+    "claimed": -10.3823,
+    "independent": -10.3054
+   },
+   {
+    "claimed": 2.73761,
+    "independent": 2.83654
+   },
+   {
+    "claimed": -0.84028,
+    "independent": -0.990383
+   },
+   {
+    "claimed": -4.02391,
+    "independent": -4.00611
+   },
+   {
+    "claimed": 4.1873,
+    "independent": 4.01001
+   },
+   {
+    "claimed": -0.299581,
+    "independent": -0.321935
+   },
+   {
+    "claimed": -0.0695993,
+    "independent": -0.130075
+   },
+   {
+    "claimed": 3.31689,
+    "independent": 3.2283
+   },
+   {
+    "claimed": 1.63618,
+    "independent": 1.50572
+   },
+   {
+    "claimed": 2.33246,
+    "independent": 2.29728
+   },
+   {
+    "claimed": -3.53229,
+    "independent": -3.55605
+   },
+   {
+    "claimed": 0.785307,
+    "independent": 0.59851
+   },
+   {
+    "claimed": 0.581097,
+    "independent": 0.44381
+   },
+   {
+    "claimed": -1.79104,
+    "independent": -1.60013
+   },
+   {
+    "claimed": -4.68555,
+    "independent": -4.75504
+   },
+   {
+    "claimed": -3.71655,
+    "independent": -3.70429
+   },
+   {
+    "claimed": -2.23914,
+    "independent": -2.33148
+   },
+   {
+    "claimed": 6.2489,
+    "independent": 6.30397
+   },
+   {
+    "claimed": 4.31736,
+    "independent": 4.31779
+   },
+   {
+    "claimed": -2.9487,
+    "independent": -2.68392
+   }
+  ]
+ }
+}

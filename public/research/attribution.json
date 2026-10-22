@@ -1,0 +1,41 @@
+{
+ "games": 600,
+ "particles": 5000,
+ "alpha": 0.25,
+ "player": "advisor bot",
+ "seeds": "test",
+ "rows": [
+  {
+   "mm": "naive",
+   "spreadCapture": 57.7448,
+   "adverseSelection": -28.8664,
+   "inventory": 1.00189,
+   "player": -30.7003,
+   "total": -0.82,
+   "ci95": {
+    "spreadCapture": 2.07599,
+    "adverseSelection": 3.04454,
+    "inventory": 2.25459,
+    "player": 3.94028,
+    "total": 6.31591
+   },
+   "spread": 6.34771
+  },
+  {
+   "mm": "analytical",
+   "spreadCapture": 54.5042,
+   "adverseSelection": -20.1551,
+   "inventory": 5.85756,
+   "player": -16.4992,
+   "total": 23.7075,
+   "ci95": {
+    "spreadCapture": 1.50713,
+    "adverseSelection": 2.2703,
+    "inventory": 3.27694,
+    "player": 2.56731,
+    "total": 3.45405
+   },
+   "spread": 5.64684
+  }
+ ]
+}

@@ -32,8 +32,10 @@ describe('post-game review', () => {
       const realized = review.trades.reduce((a, t) => a + t.realized, 0);
       expect(realized).toBe(game.settlement().pnl.player);
       for (const s of review.steps) {
-        if (s.quote.bid !== null) expect(Math.abs(composeBid(s.explanation)! - s.quote.bid)).toBeLessThan(1e-9);
-        if (s.quote.ask !== null) expect(Math.abs(composeAsk(s.explanation)! - s.quote.ask)).toBeLessThan(1e-9);
+        if (s.quote.bid !== null)
+          expect(Math.abs(composeBid(s.explanation)! - s.quote.bid)).toBeLessThan(1e-9);
+        if (s.quote.ask !== null)
+          expect(Math.abs(composeAsk(s.explanation)! - s.quote.ask)).toBeLessThan(1e-9);
         expect(s.explanationText.headline).toContain('Bid');
       }
       expect(review.missed.length).toBeLessThanOrEqual(3);

@@ -24,7 +24,9 @@ test('the tutorial runs end to end and opens a review', async ({ page }) => {
   await expect(page.getByTestId('settlement')).toBeVisible();
   await expect(page.getByRole('dialog')).toContainText('Review');
   await page.getByRole('link', { name: 'Review this game' }).click();
-  await expect(page.getByRole('heading', { name: /You (made|lost|broke even)/ })).toBeVisible({ timeout: 30_000 });
+  await expect(page.getByRole('heading', { name: /You (made|lost|broke even)/ })).toBeVisible({
+    timeout: 30_000,
+  });
   await expect(page.getByRole('heading', { name: 'Timeline' })).toBeVisible();
   await expect(page.getByText('the market maker’s brain')).toBeVisible();
   await page.getByRole('button', { name: 'Next →' }).click();
