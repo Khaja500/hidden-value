@@ -73,7 +73,7 @@ If the session ends partway, start a new one with:
 ✅ A full game is playable in the browser at all difficulties except Expert; Playwright and no-leak tests pass; deployed.
 🔍 **Play 3 games on the live site.** Is it obvious which button buys and which sells? Is the Advisor readable at a glance? Does it work on your phone?
 
-### 7. Review, Tutorial, Practice and Daily challenge
+### 7. Review, Tutorial, Practice and Daily challenge — [x] done
 🤖
 - Review page per spec §7 (timeline scrubber, revealed MM explanations, graded trades, key moments, lessons, JSON export, share-a-seed link).
 - Guided Tutorial with pop-ups and the Glosten–Milgrom worked example.

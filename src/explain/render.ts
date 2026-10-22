@@ -182,19 +182,35 @@ export function renderAdvice(a: Advice, privateCards: readonly { card: number }[
     const parts: string[] = [];
     if (a.buyEdge !== null) {
       const e = a.buyEdge;
-      parts.push(
-        e <= 0
-          ? `Ask ${fmt(a.estimate.mean - e)} vs your estimate ${fmt(a.estimate.mean)}: buying loses ${fmt(-e)} per unit on average.`
-          : `Buying gains only ${fmt(e)} per unit, less than the ${fmt(a.minEdge)} needed at this level of uncertainty${a.buyProb !== null && a.buyProb < a.pMin ? ` (and only a ${pct(a.buyProb)} chance V ends above the ask)` : ''}.`,
-      );
+      const ask = a.estimate.mean - e;
+      if (e <= 0) {
+        parts.push(
+          `Ask ${fmt(ask)} vs your estimate ${fmt(a.estimate.mean)}: buying loses ${fmt(-e)} per unit on average.`,
+        );
+      } else if (e <= a.minEdge) {
+        parts.push(
+          `Ask ${fmt(ask)}: buying gains only ${fmt(e)} per unit, less than the ${fmt(a.minEdge)} needed at this level of uncertainty.`,
+        );
+      } else if (a.buyProb !== null && a.buyProb < a.pMin) {
+        parts.push(
+          `Ask ${fmt(ask)}: buying gains ${fmt(e)} per unit on average, but there is only a ${pct(a.buyProb)} chance V ends above the ask (the Advisor wants ${pct(a.pMin)}).`,
+        );
+      }
     }
     if (a.sellEdge !== null) {
       const e = a.sellEdge;
-      parts.push(
-        e <= 0
-          ? `Bid ${fmt(a.estimate.mean + e)}: selling gives up ${fmt(-e)} per unit.`
-          : `Selling gains only ${fmt(e)} per unit, less than the ${fmt(a.minEdge)} needed${a.sellProb !== null && a.sellProb < a.pMin ? ` (only a ${pct(a.sellProb)} chance V ends below the bid)` : ''}.`,
-      );
+      const bid = a.estimate.mean + e;
+      if (e <= 0) {
+        parts.push(`Bid ${fmt(bid)}: selling gives up ${fmt(-e)} per unit.`);
+      } else if (e <= a.minEdge) {
+        parts.push(
+          `Bid ${fmt(bid)}: selling gains only ${fmt(e)} per unit, less than the ${fmt(a.minEdge)} needed.`,
+        );
+      } else if (a.sellProb !== null && a.sellProb < a.pMin) {
+        parts.push(
+          `Bid ${fmt(bid)}: selling gains ${fmt(e)} per unit on average, but there is only a ${pct(a.sellProb)} chance V ends below the bid (the Advisor wants ${pct(a.pMin)}).`,
+        );
+      }
     }
     if (a.maxBuy === 0 && a.buyEdge !== null && a.buyEdge > a.minEdge)
       parts.push('You cannot buy more: position limit.');

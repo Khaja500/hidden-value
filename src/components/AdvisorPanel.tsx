@@ -15,8 +15,14 @@ interface Props {
   disabled?: boolean;
 }
 
-export function AdviceCard({ advice, view }: { advice: Advice; view: PlayerView }) {
-  const r = renderAdvice(advice, view.privateCards);
+export function AdviceCard({
+  advice,
+  privateCards,
+}: {
+  advice: Advice;
+  privateCards: readonly { card: number }[];
+}) {
+  const r = renderAdvice(advice, privateCards);
   const tone = advice.action === 'buy' ? 'buy' : advice.action === 'sell' ? 'sell' : 'hold';
   return (
     <div className={`advice advice--${tone}`} data-testid="advice">
@@ -47,7 +53,7 @@ export function AdvisorPanel({ view, belief, advice, onAsk, hintsUsed = 0, alway
         Advisor
       </h2>
       {advice ? (
-        <AdviceCard advice={advice} view={view} />
+        <AdviceCard advice={advice} privateCards={view.privateCards} />
       ) : view.phase === 'settled' ? (
         <p className="muted">
           Game over. The Review shows what the Advisor recommended at every step, and how each of your trades

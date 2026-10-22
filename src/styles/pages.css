@@ -18,3 +18,342 @@
     grid-template-columns: minmax(0, 1fr);
   }
 }
+
+/* ---- Tutorial ---------------------------------------------------------------------------------------------- */
+
+.tut__lesson {
+  font-size: 1.05rem;
+  margin: 12px 0 18px;
+}
+
+.tut__lesson ul {
+  padding-left: 20px;
+}
+
+.tut__cards {
+  margin: 10px 0 14px;
+}
+
+.tut__nav {
+  margin-bottom: 18px;
+}
+
+.gm__slider {
+  display: grid;
+  gap: 6px;
+  max-width: 420px;
+  margin: 10px 0 12px;
+}
+
+.gm__steps {
+  padding-left: 20px;
+}
+
+.gm__steps li + li {
+  margin-top: 6px;
+}
+
+.tip {
+  background: var(--ink);
+  color: var(--paper);
+  border-radius: var(--radius);
+  padding: 14px 16px;
+  box-shadow: var(--shadow-lift);
+  position: relative;
+}
+
+.tip::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 5px;
+  background: var(--brass);
+  border-radius: var(--radius) 0 0 var(--radius);
+}
+
+.tip__title {
+  font-size: 1.05rem;
+  margin: 0 0 6px;
+  color: var(--paper);
+}
+
+.tip__body {
+  margin: 0 0 10px;
+  max-width: 90ch;
+}
+
+.tip .btn {
+  background: var(--paper);
+  color: var(--ink);
+  border-color: var(--paper);
+}
+
+/* ---- Daily ------------------------------------------------------------------------------------------------- */
+
+.leaderboard {
+  margin-top: 24px;
+}
+
+.lb__first td {
+  font-weight: 600;
+  background: var(--brass-soft);
+}
+
+.ranked p:last-child {
+  margin-bottom: 0;
+}
+
+/* ---- Review ------------------------------------------------------------------------------------------------ */
+
+.review > * + * {
+  margin-top: 16px;
+}
+
+.review__head {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 12px;
+}
+
+.review__head h1 {
+  margin: 0;
+}
+
+.review__outcome-grid {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 20px;
+  align-items: center;
+}
+
+@media (max-width: 760px) {
+  .review__outcome-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.review__step {
+  display: grid;
+  grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
+  gap: 16px;
+  align-items: start;
+}
+
+.review__cols {
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+  gap: 16px;
+  align-items: start;
+}
+
+@media (max-width: 900px) {
+  .review__step,
+  .review__cols {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+.review__quote-head {
+  font: 500 1.6rem/1.1 var(--font-mono);
+  margin: 6px 0 8px;
+}
+
+.review__bot {
+  margin-bottom: 4px;
+}
+
+.review__bullets {
+  padding-left: 20px;
+  margin: 0 0 12px;
+}
+
+.review__bullets li + li {
+  margin-top: 4px;
+}
+
+.review__sub {
+  font: 600 0.92rem/1.3 var(--font-ui);
+  margin: 14px 0 6px;
+}
+
+.review__did {
+  margin-top: 12px;
+}
+
+.review__note {
+  font-size: 0.85rem;
+  margin: 10px 0 0;
+}
+
+.review__lessons ul {
+  margin: 0;
+  padding-left: 20px;
+}
+
+.review__lessons li + li {
+  margin-top: 6px;
+}
+
+.components {
+  margin-top: 6px;
+}
+
+.components__total td {
+  font-weight: 600;
+  border-top: 2px solid var(--rule-strong);
+}
+
+.moments {
+  padding-left: 20px;
+  margin: 0;
+}
+
+.moments li + li {
+  margin-top: 6px;
+}
+
+.linkish {
+  appearance: none;
+  background: none;
+  border: none;
+  padding: 0;
+  font: 500 0.9em var(--font-mono);
+  color: var(--buy);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  cursor: pointer;
+}
+
+.progress {
+  height: 8px;
+  border-radius: 999px;
+  background: var(--sunken);
+  overflow: hidden;
+  max-width: 420px;
+}
+
+.progress span {
+  display: block;
+  height: 100%;
+  background: var(--brass);
+  transition: width 200ms ease;
+}
+
+/* ---- Timeline chart ---------------------------------------------------------------------------------------- */
+
+.timeline__chart {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.tl__grid {
+  stroke: var(--rule);
+}
+
+.tl__round {
+  stroke: var(--rule-strong);
+  stroke-dasharray: 3 4;
+}
+
+.tl__tick {
+  font: 11px var(--font-mono);
+  fill: var(--muted);
+}
+
+.tl__quote {
+  stroke: var(--rule-strong);
+  stroke-width: 5;
+  stroke-linecap: round;
+  opacity: 0.6;
+}
+
+.tl__value {
+  stroke: var(--brass);
+  stroke-width: 2.5;
+}
+
+.tl__mm {
+  fill: none;
+  stroke: var(--ink-2);
+  stroke-width: 2;
+  stroke-dasharray: 6 4;
+}
+
+.tl__you {
+  fill: none;
+  stroke: var(--buy);
+  stroke-width: 2.5;
+}
+
+.tl__trade {
+  font-size: 12px;
+}
+
+.tl__trade--buy {
+  fill: var(--buy);
+}
+
+.tl__trade--sell {
+  fill: var(--sell);
+}
+
+.tl__cursor {
+  stroke: var(--ink);
+  stroke-width: 1.5;
+}
+
+.tl__legend {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 18px;
+  padding: 0;
+  margin: 6px 0 10px;
+  font-size: 0.85rem;
+  color: var(--ink-2);
+}
+
+.tl__legend li::before {
+  content: '';
+  display: inline-block;
+  width: 18px;
+  height: 0;
+  margin-right: 6px;
+  vertical-align: middle;
+  border-top: 2.5px solid;
+}
+
+.tl__legend--you::before {
+  border-color: var(--buy) !important;
+}
+
+.tl__legend--mm::before {
+  border-top-style: dashed !important;
+  border-color: var(--ink-2) !important;
+}
+
+.tl__legend--value::before {
+  border-color: var(--brass) !important;
+}
+
+.tl__legend--quote::before {
+  border-top-width: 6px !important;
+  border-color: var(--rule-strong) !important;
+}
+
+.tl__scrub {
+  display: grid;
+  grid-template-columns: auto 1fr auto auto;
+  gap: 10px;
+  align-items: center;
+}
+
+.tl__pos {
+  min-width: 64px;
+  text-align: right;
+}

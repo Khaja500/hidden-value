@@ -129,6 +129,8 @@
     'overlay overlay overlay'
     'cards board advisor'
     'position feed advisor';
+  /* The tall Advisor column spans two rows; let the last row absorb its extra height. */
+  grid-template-rows: auto auto auto 1fr;
   align-items: start;
 }
 
@@ -167,6 +169,7 @@
       'board advisor'
       'cards advisor'
       'position feed';
+    grid-template-rows: auto auto auto 1fr auto;
   }
 }
 
@@ -181,6 +184,7 @@
       'position'
       'feed'
       'board';
+    grid-template-rows: none;
     padding-bottom: 210px;
   }
   /* On phones the quote board and order buttons stay on screen. */

@@ -3,6 +3,7 @@
  * hidden cards) lives in this module's closure and is never put into React state. After settlement the full
  * SettledView (all cards) becomes available.
  */
+import { useState } from 'react';
 import { create } from 'zustand';
 import { Advisor, type Advice } from '../agents/advisor';
 import { createGame } from '../agents/factory';
@@ -236,4 +237,16 @@ export const useGame = create<GameState>((set, get) => ({
 /** Test-only: the engine-side game, so tests can compare it with what the store exposes. */
 export function __engineForTests(): Game | null {
   return game;
+}
+
+/**
+ * Whether a page should show the game screen for `mode`: while a game of that mode is in progress, or once it has
+ * settled if it was started from this page visit. Coming back to the page later shows the page itself again.
+ */
+export function useGameVisible(mode: Mode): [boolean, () => void] {
+  const status = useGame((s) => s.status);
+  const current = useGame((s) => s.mode);
+  const [startedHere, setStartedHere] = useState(false);
+  const show = current === mode && (status === 'playing' || (status === 'settled' && startedHere));
+  return [show, () => setStartedHere(true)];
 }

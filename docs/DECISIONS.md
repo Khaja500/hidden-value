@@ -75,3 +75,13 @@ No `frontend-design` skill was available in this environment, so this plan is wr
 - **Motifs:** panels look like order tickets (perforated top edge, small stamped uppercase labels); the quote board looks like a pit price board with big mono digits; cards are real card faces (rank + suit corners), with hidden cards shown as a patterned back.
 - **Motion:** a price change briefly highlights the new number (220 ms); trades slide into the feed. All motion is off under `prefers-reduced-motion`.
 - **Layout (Play):** top bar (round, step, difficulty, mode, countdown); left column cards; centre quote board and order buttons; right column Advisor and belief histogram; bottom trade feed and position. On phones the columns stack, and the quote board and order buttons stick to the bottom of the screen.
+
+## Review, Tutorial, Practice, Daily (step 7)
+
+- **Game logs store only config + actions** (plus the result). The Review rebuilds everything by replaying the game in the Web Worker, which is deterministic, so it shows exactly what happened, including MM explanations with counterfactuals. This keeps localStorage small: 20 logs fit easily.
+- **Bot types are revealed in the Review** ("an informed trader who knew 8♠ bought 2"). After settlement every card is public, so this is no leak, and it shows what the MM was guarding against.
+- **Hints:** in Practice the belief histogram and estimate are always visible (they are "your belief"), while the BUY/SELL/HOLD recommendation is shown only when asked; each ask counts as one hint. Daily (ranked) shows neither, and gives no post-trade verdicts (they come from the Advisor's estimate).
+- **Daily challenge:** the Medium table, with the seed `hash("hidden-value-daily", UTC date)`. The leaderboard is per browser; the first attempt is marked as the ranked score, because replays know the cards.
+- **Tutorial deal:** seed 1757224188, found by searching for a deal where you hold a King, the Advisor says BUY on the first step, and the reveals go both ways (Q, then 5 and 4). All tip text is filled in from the live game state, so it stays true whatever the player does.
+- **Focus after mouse clicks:** order buttons drop focus after a mouse click (`event.detail > 0`). Otherwise Space, the pass shortcut, would re-press the focused Buy button. Keyboard activation keeps focus.
+- **Pages show the game only while it is running or just finished there.** Coming back to Play / Daily / Tutorial after a finished game shows the picker, leaderboard or lessons again.
