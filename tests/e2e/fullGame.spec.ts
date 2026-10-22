@@ -48,3 +48,20 @@ test('timed mode passes automatically when the countdown runs out', async ({ pag
   await expect(page.locator('.countdown')).toBeVisible();
   await expect(page.locator('.feed__item--you').first()).toContainText('You passed', { timeout: 8_000 });
 });
+
+for (const d of ['easy', 'medium', 'hard', 'expert']) {
+  test(`plays a full ${d} game on a phone-sized screen`, async ({ page }) => {
+    await page.setViewportSize({ width: 390, height: 844 });
+    await page.goto('./#/play');
+    await page.getByTestId(`start-${d}`).click();
+    // The order buttons stay on screen on phones.
+    await expect(page.getByRole('button', { name: /Buy 1/ })).toBeInViewport();
+    for (let i = 0; i < 32; i++) {
+      const tip = page.getByRole('button', { name: 'Got it' });
+      if (await tip.isVisible()) await tip.click();
+      await page.getByRole('button', { name: /^Pass/ }).click();
+    }
+    await expect(page.getByTestId('settlement')).toBeVisible();
+    await expect(page.locator('[data-card]')).toHaveCount(5);
+  });
+}
