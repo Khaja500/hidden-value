@@ -24,7 +24,7 @@ Non-obvious choices made while building Hidden Value, with the reason for each.
 - **Glosten–Milgrom quotes** come from per-key weight accumulators, sorted by valuation, so E[V | buy at a] for any a is a binary search plus a difference of cumulative sums. The fixed point a = E[V | buy at a] is found by iterating from μ.
 - **Hard-mode player model:** the MM treats each player trade as informed with β = 0.5: P(trade | V) = 0.5 · 0.5 + 0.5 · 1[player's valuation beats the quote]. Player passes are ignored.
 - **Measured speed (M1 laptop, Node):** a trade update takes a median 0.4 ms and a reveal 9 ms with 5,000 particles (`npx tsx scripts/bench.ts`).
-- **Tests:** the calibration test uses 2,000 particles to keep CI fast; the site uses 5,000. With 10 independent 95% intervals, one miss happens by chance about 40% of the time, so the test allows at most 1 of 10 buckets outside its interval. The 30 ms budget is checked as a median after warm-up, and CI runners get 3× the budget.
+- **Tests:** the calibration test uses 2,000 particles to keep CI fast; the site uses 5,000. With 10 independent 95% intervals, one miss happens by chance about 40% of the time, so the test allows at most 1 of 10 buckets outside its interval. The 30 ms budget is checked by `npm run bench` as a median after warm-up. The unit test is only a loose 100 ms regression guard, because test files run in parallel and compete for the CPU, which made a strict 30 ms test flaky.
 
 ## Noise traders are price-sensitive (spec detail, decided in step 4)
 
