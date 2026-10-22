@@ -398,15 +398,15 @@ hidden-value/
 
 ## 12. Definition of done
 
-- [ ] Site is live at `https://<user>.github.io/hidden-value/` from a public repo in the user's account, deployed by GitHub Actions
-- [ ] A full game is playable on desktop and mobile in turn-based and timed modes, at all four difficulties
-- [ ] Tutorial, Practice, Daily challenge, Review, Research, Sandbox and About pages all work
-- [ ] Advisor gives BUY / SELL / HOLD with size, numbers and reasons; no-cheat test passes
-- [ ] Every analytical MM quote has an explanation whose parts sum exactly; counterfactual test passes
-- [ ] Advisor bot is profitable at Easy, Medium and Hard (95% CI above 0)
-- [ ] Learned MM trained, playable in Expert mode, and explained on the Research page
-- [ ] All tests pass in CI; Playwright plays a full game
-- [ ] README: what the game is, how to play, how it works, research highlights, a screenshot or GIF, the live link
+- [x] Site is live at `https://<user>.github.io/hidden-value/` from a public repo in the user's account, deployed by GitHub Actions
+- [x] A full game is playable on desktop and mobile in turn-based and timed modes, at all four difficulties
+- [x] Tutorial, Practice, Daily challenge, Review, Research, Sandbox and About pages all work
+- [x] Advisor gives BUY / SELL / HOLD with size, numbers and reasons; no-cheat test passes
+- [x] Every analytical MM quote has an explanation whose parts sum exactly; counterfactual test passes
+- [x] Advisor bot is profitable at Easy, Medium and Hard (95% CI above 0)
+- [x] Learned MM trained, playable in Expert mode, and explained on the Research page
+- [x] All tests pass in CI; Playwright plays a full game
+- [x] README: what the game is, how to play, how it works, research highlights, a screenshot or GIF, the live link
 
 ---
 
