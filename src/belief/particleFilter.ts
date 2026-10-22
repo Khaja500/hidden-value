@@ -8,7 +8,8 @@
  * surviving particles in proportion to each group's effective sample size. Resampling (systematic) happens when
  * the effective sample size drops below half the particle count.
  */
-import { DECK_SIZE, HAND_SIZE, MAX_VALUE, RANKS } from '../engine/cards';
+import { noiseBuyProb, noiseSellProb } from '../agents/noise';
+import { DECK_SIZE, expectedValue, HAND_SIZE, MAX_VALUE, RANKS } from '../engine/cards';
 import { Rng } from '../engine/rng';
 import type { ActionEvent, ActionSide } from '../engine/types';
 import {
@@ -48,8 +49,16 @@ interface HistoryEntry {
   q: QuoteFaced;
 }
 
-function quoteFaced(e: ActionEvent): QuoteFaced {
-  return { bid: e.quote.bid, ask: e.quote.ask, bidOpen: e.quote.bidSize > 0, askOpen: e.quote.askSize > 0 };
+function quoteFaced(e: ActionEvent, publicEV: number): QuoteFaced {
+  const { bid, ask } = e.quote;
+  return {
+    bid,
+    ask,
+    bidOpen: e.quote.bidSize > 0,
+    askOpen: e.quote.askSize > 0,
+    pNoiseBuy: ask === null ? 0 : noiseBuyProb(ask, publicEV),
+    pNoiseSell: bid === null ? 0 : noiseSellProb(bid, publicEV),
+  };
 }
 
 export class ParticleFilter {
@@ -63,6 +72,8 @@ export class ParticleFilter {
   private keys: Uint16Array;
   private pkeys: Uint16Array;
   private publicMask = 0;
+  private publicSum = 0;
+  private publicCount = 0;
   private knownMask = 0;
   private readonly knownRank = new Uint8Array(HAND_SIZE);
   private readonly history: HistoryEntry[] = [];
@@ -166,6 +177,10 @@ export class ParticleFilter {
   reveal(position: number, rank: number): void {
     const bit = 1 << position;
     const alreadyKnown = (this.knownMask & bit) !== 0;
+    if (!(this.publicMask & bit)) {
+      this.publicSum += rank;
+      this.publicCount += 1;
+    }
     this.publicMask |= bit;
     this.knownMask |= bit;
     this.knownRank[position] = rank;
@@ -216,7 +231,7 @@ export class ParticleFilter {
    */
   observe(e: ActionEvent): void {
     if (e.taker === 'player' && (!this.pm || e.side === 'pass')) return;
-    const q = quoteFaced(e);
+    const q = quoteFaced(e, this.publicEV());
     const entry: HistoryEntry = { publicMask: this.publicMask, taker: e.taker, side: e.side, q };
     this.history.push(entry);
     const w = this.w;
@@ -238,6 +253,11 @@ export class ParticleFilter {
       return;
     }
     for (let i = 0; i < this.n; i++) this.w[i] /= s;
+  }
+
+  /** Expected V given the public reveals only. */
+  publicEV(): number {
+    return expectedValue(this.publicSum, this.publicCount);
   }
 
   ess(): number {
@@ -359,7 +379,8 @@ export class ParticleFilter {
     const j = upperBound(ask);
     const infW = this.cumW[N_KEYS] - this.cumW[j];
     const infWV = this.cumWV[N_KEYS] - this.cumWV[j];
-    const { alpha, pNoiseBuy } = this.model;
+    const { alpha } = this.model;
+    const pNoiseBuy = noiseBuyProb(ask, this.publicEV());
     const den = (1 - alpha) * pNoiseBuy + alpha * infW;
     if (den <= 0) return this.mu;
     return ((1 - alpha) * pNoiseBuy * this.mu + alpha * infWV) / den;
@@ -371,7 +392,8 @@ export class ParticleFilter {
     const j = lowerBound(bid);
     const infW = this.cumW[j];
     const infWV = this.cumWV[j];
-    const { alpha, pNoiseSell } = this.model;
+    const { alpha } = this.model;
+    const pNoiseSell = noiseSellProb(bid, this.publicEV());
     const den = (1 - alpha) * pNoiseSell + alpha * infW;
     if (den <= 0) return this.mu;
     return ((1 - alpha) * pNoiseSell * this.mu + alpha * infWV) / den;

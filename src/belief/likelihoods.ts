@@ -8,7 +8,7 @@
  * subset-weighted share of keys whose valuation exceeds the ask.
  */
 import { expectedValue, HAND_SIZE, MAX_VALUE } from '../engine/cards';
-import { INFORMED_K_PROBS, NOISE_BUY_PROB, NOISE_SELL_PROB } from '../engine/rules';
+import { INFORMED_K_PROBS } from '../engine/rules';
 import type { ActionSide } from '../engine/types';
 
 export const S_SPAN = MAX_VALUE + 1; // sums 0..65
@@ -69,12 +69,10 @@ export function lowerBound(x: number): number {
 /** How bot takers behave, as the belief model assumes. α may differ from the game's true α. */
 export interface TraderModel {
   alpha: number;
-  pNoiseBuy: number;
-  pNoiseSell: number;
 }
 
 export function traderModel(alpha: number): TraderModel {
-  return { alpha, pNoiseBuy: NOISE_BUY_PROB, pNoiseSell: NOISE_SELL_PROB };
+  return { alpha };
 }
 
 /**
@@ -118,6 +116,9 @@ export interface QuoteFaced {
   ask: number | null;
   bidOpen: boolean;
   askOpen: boolean;
+  /** Chance a noise trader buys at this ask / sells at this bid (depends on public information only). */
+  pNoiseBuy: number;
+  pNoiseSell: number;
 }
 
 /** P(observed bot action | particle), from the particle's 15 subset keys. */
@@ -137,8 +138,8 @@ export function botLikelihood(
     if (v > ask) infBuy += SUBSET_WEIGHTS[k];
     else if (v < bid) infSell += SUBSET_WEIGHTS[k];
   }
-  const pBuy = q.askOpen ? (1 - m.alpha) * m.pNoiseBuy + m.alpha * infBuy : 0;
-  const pSell = q.bidOpen ? (1 - m.alpha) * m.pNoiseSell + m.alpha * infSell : 0;
+  const pBuy = q.askOpen ? (1 - m.alpha) * q.pNoiseBuy + m.alpha * infBuy : 0;
+  const pSell = q.bidOpen ? (1 - m.alpha) * q.pNoiseSell + m.alpha * infSell : 0;
   if (side === 'buy') return pBuy;
   if (side === 'sell') return pSell;
   return 1 - pBuy - pSell;

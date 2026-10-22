@@ -5,7 +5,7 @@
  */
 import { informedDecision, valuationFromPositions } from '../agents/informed';
 import { noiseDecision } from '../agents/noise';
-import { DECK_SIZE, HAND_SIZE } from './cards';
+import { DECK_SIZE, expectedValue, HAND_SIZE, rankOf } from './cards';
 import { hashSeed, Rng } from './rng';
 import { BOT_MAX_SIZE, INFORMED_K_PROBS } from './rules';
 import { newAccount, type Account, type BotTicket, type FullState } from './state';
@@ -37,6 +37,12 @@ export interface GameHooks {
   onQuote?: (quote: Quote, mm: MarketMaker, state: Readonly<FullState>) => void;
 }
 
+export function publicExpectedValue(revealed: readonly { card: number }[]): number {
+  let sum = 0;
+  for (const r of revealed) sum += rankOf(r.card);
+  return expectedValue(sum, revealed.length);
+}
+
 function freezeQuote(q: Quote): Quote {
   return Object.freeze({ bid: q.bid, ask: q.ask, bidSize: q.bidSize, askSize: q.askSize });
 }
@@ -59,10 +65,11 @@ export function drawTickets(config: GameConfig): BotTicket[] {
     const uK = rng.next();
     const perm = rng.shuffle([0, 1, 2, 3, 4]);
     const uNoise = rng.next();
+    const uTol = rng.next();
     const size = 1 + rng.int(BOT_MAX_SIZE);
     const informed = uType < config.alpha;
     const k = uK < INFORMED_K_PROBS[0] ? 1 : 2;
-    tickets.push({ type: informed ? 'informed' : 'noise', positions: perm.slice(0, k), uNoise, size });
+    tickets.push({ type: informed ? 'informed' : 'noise', positions: perm.slice(0, k), uNoise, uTol, size });
   }
   return tickets;
 }
@@ -195,7 +202,7 @@ export class Game {
     let side;
     let valuation: number | null = null;
     if (t.type === 'noise') {
-      side = noiseDecision(t.uNoise, q);
+      side = noiseDecision(t.uNoise, t.uTol, q, publicExpectedValue(s.revealed));
     } else {
       const known = [...s.revealed.map((r) => r.position), ...t.positions];
       valuation = valuationFromPositions(s.cards, known);

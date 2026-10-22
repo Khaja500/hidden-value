@@ -69,6 +69,8 @@ export interface MMParams {
   disableRiskSpread?: boolean;
   /** Learned MM variant. */
   learnedVariant?: 'linear' | 'mlp';
+  /** Counterfactual replays: quote as if the inventory were this value. */
+  inventoryOverride?: number;
 }
 
 export interface GameConfig {
@@ -158,6 +160,8 @@ export interface Counterfactual {
   if: string;
   bid: number | null;
   ask: number | null;
+  /** What was changed, so the counterfactual can be checked against a real replay. */
+  change: { kind: 'inventory'; value: number } | { kind: 'remove'; seqs: number[] };
 }
 
 /** A per-feature breakdown of a learned-MM quote via its distilled linear model. */

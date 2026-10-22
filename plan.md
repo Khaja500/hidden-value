@@ -45,7 +45,7 @@ If the session ends partway, start a new one with:
 
 ✅ Calibration test passes; updates < 30 ms.
 
-### 4. Bots and market makers
+### 4. Bots and market makers — [x] done
 🤖
 - Noise and informed bots; naive MM; analytical MM with fair value, adverse-selection spread, inventory skew and risk spread (spec §4).
 - `QuoteExplanation` with counterfactuals and the plain-language renderer.

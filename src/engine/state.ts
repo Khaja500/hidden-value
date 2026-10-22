@@ -13,6 +13,8 @@ export interface BotTicket {
   positions: number[];
   /** Uniform draw that decides a noise bot's side. */
   uNoise: number;
+  /** Uniform draw for a noise bot's price tolerance. */
+  uTol: number;
   /** Desired trade size 1..3, capped by the quoted size. */
   size: number;
 }

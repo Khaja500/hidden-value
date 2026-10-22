@@ -11,9 +11,11 @@ export const MM_MAX_QUOTE_SIZE = 5;
 export const TICK = 0.5;
 export const MIN_SPREAD = 1.0;
 
-/** Noise traders buy or sell regardless of price; they pass the rest of the time. */
+/** Noise traders want to buy or sell with these probabilities; they pass the rest of the time. */
 export const NOISE_BUY_PROB = 0.4;
 export const NOISE_SELL_PROB = 0.4;
+/** Mean of a noise trader's exponential price tolerance, relative to the public-card expected value. */
+export const NOISE_TOLERANCE_MEAN = 2;
 /** Informed bots see 1 or 2 of the 5 hidden cards (chosen uniformly from all 5 positions), each with probability ½. */
 export const INFORMED_K_PROBS: readonly [number, number] = [0.5, 0.5];
 /** Bots trade 1–3 units, drawn the same way for noise and informed bots, so size carries no information. */

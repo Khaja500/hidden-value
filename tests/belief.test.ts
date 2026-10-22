@@ -71,9 +71,10 @@ describe('particle filter', () => {
     expect(f.probAbove(35.5) + f.probBelow(35.5)).toBeCloseTo(1, 10);
   });
 
-  it('one update stays under 30 ms with 5,000 particles (median after warm-up)', () => {
-    // Shared CI runners are several times slower than a laptop; the 30 ms budget is for a laptop.
-    const budget = process.env.CI ? 90 : 30;
+  it('updates stay fast with 5,000 particles (regression guard; `npm run bench` checks the 30 ms budget)', () => {
+    // Other test files run in parallel and compete for the CPU, so this guard is loose. The 30 ms laptop budget
+    // is asserted by scripts/bench.ts, which runs alone.
+    const budget = 100;
     const observeMs: number[] = [];
     const revealMs: number[] = [];
     for (let rep = 0; rep < 6; rep++) {

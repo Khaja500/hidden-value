@@ -25,3 +25,28 @@ Non-obvious choices made while building Hidden Value, with the reason for each.
 - **Hard-mode player model:** the MM treats each player trade as informed with β = 0.5: P(trade | V) = 0.5 · 0.5 + 0.5 · 1[player's valuation beats the quote]. Player passes are ignored.
 - **Measured speed (M1 laptop, Node):** a trade update takes a median 0.4 ms and a reveal 9 ms with 5,000 particles (`npx tsx scripts/bench.ts`).
 - **Tests:** the calibration test uses 2,000 particles to keep CI fast; the site uses 5,000. With 10 independent 95% intervals, one miss happens by chance about 40% of the time, so the test allows at most 1 of 10 buckets outside its interval. The 30 ms budget is checked as a median after warm-up, and CI runners get 3× the budget.
+
+## Noise traders are price-sensitive (spec detail, decided in step 4)
+
+The spec says noise bots "see only public cards" but not how they react to prices. If they trade whatever the price, the most profitable spread is infinitely wide. The naive MM's fixed spread of 6 would then out-earn any principled market maker. The learned MM would just learn "quote as wide as possible", and the research question about adverse-selection widening would be meaningless.
+
+So each noise trader also has a **price tolerance τ ~ Exponential(mean 2)** and trades only if the price is at most τ worse than the public-card expected value: P(noise buy at ask) = 0.4 · exp(−max(0, ask − public EV)/2). The chance depends on public information only, so it is the same for every hidden-card assignment. The belief model includes it, with the noise share evaluated at the quote actually faced.
+
+I chose τ̄ by simulation (300 bot-only games per cell; MM P&L per game, `npx tsx scripts/quickcheck.ts`):
+
+| τ̄          | α = 0.2 naive / analytical | α = 0.3     | α = 0.5      | analytical spread at α = 0.3   |
+| ---------- | -------------------------- | ----------- | ------------ | ------------------------------ |
+| 1.5        | 7.3 / 12.8                 | 1.1 / 12.9  | −12.6 / 10.3 | 7.0 (too wide to play against) |
+| 2 (chosen) | 18.1 / 23.4                | 10.6 / 22.9 | −5.6 / 22.2  | 5.9                            |
+| 3          | 37.3 / 18.7                | 29.0 / 19.4 | 8.2 / 16.6   | 3.6 (naive wins up to α = 0.4) |
+
+The τ̄ = 2 analytical figures use the chosen γ = 0.01, c = 3.
+
+## Analytical market maker
+
+- **γ = 0.01, c_risk = 3.** With γ = 0.005 and c = 2 the analytical MM only tied the naive MM at α = 0.2. Its spread sat below the profit-maximising width, because Glosten–Milgrom spreads alone earn zero expected profit against bots. γ = 0.01 with c = 3 beats naive at every α ≥ 0.2 and has the lowest P&L variance of the settings tried (stronger skew keeps inventory small). The γ sweep on the Research page explores the trade-off.
+- **"Fair value change"** is measured from the fair value at the end of the previous round (the prior, 35, in round 1). The reveal, bot order flow and (Hard) player trades each get the sum of the μ changes they caused, so the reasons telescope exactly to the total change.
+- **Minimum-spread widening is folded into "rounding"**, so the named components plus rounding still equal the posted prices.
+- **"Add up exactly"** is tested to 1e-9: the parts are floating-point numbers, and a + (b − a) is not always bit-identical to b.
+- **Counterfactuals:** "if inventory were 0" reuses the current beliefs, since inventory never affects beliefs; "if the last two trades had not happened" rebuilds the MM from the event log without them. Both are checked against independent replays through `replayCounterfactual`. Each counterfactual carries a machine-readable `change` field for that check.
+- **Glosten–Milgrom is computed against the bot-trader model**, even for the quote the player faces next in Hard mode. In Hard mode the player's trades move the MM's beliefs but do not widen its spread.
