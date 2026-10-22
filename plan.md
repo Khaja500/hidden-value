@@ -20,7 +20,7 @@ If the session ends partway, start a new one with:
 
 ## Build steps
 
-### 1. Project and GitHub setup
+### 1. Project and GitHub setup — [x] done
 🤖
 - Scaffold Vite + React + TypeScript (strict), ESLint, Prettier, Vitest, Playwright; folder structure from spec §11.
 - Check `gh auth status`. If not logged in, stop and ask me to run `gh auth login`.
@@ -30,7 +30,7 @@ If the session ends partway, start a new one with:
 ✅ `https://<username>.github.io/hidden-value/` shows the placeholder; CI is green.
 🔍 Open the link on your phone and laptop.
 
-### 2. Game engine
+### 2. Game engine — [x] done
 🤖
 - Cards, seeded RNG, event-sourced state, rules, settlement, and the three views (`FullState`, `PublicView`, `PlayerView`) per spec §2 and §11.
 - Placeholder MM (public expected V ± 3) and noise bots so games run end to end.
