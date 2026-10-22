@@ -597,7 +597,7 @@ Added on 22 Oct 2026 at the user's request. It lives on the `multiplayer` branch
 - The site's storage prefix is `hidden-value-mp:`, because both editions share the khaja500.github.io origin. Vite `base` is `/hidden-value-multiplayer/`, and `REPO_URL` points at the new repo.
 
 ### 15.5 Definition of done (multiplayer)
-- [ ] Live at `https://khaja500.github.io/hidden-value-multiplayer/` from the public repo `hidden-value-multiplayer`, deployed by GitHub Actions; the original site is unchanged
-- [ ] 2-, 3- and 4-player games play to settlement on desktop and phone sizes, at every table
-- [ ] All single-player tests still pass; the multiplayer engine, no-cheat and no-leak tests pass; Playwright plays 2- and 3-player games
-- [ ] README, About, spec, plan and DECISIONS describe the multiplayer edition
+- [x] Live at `https://khaja500.github.io/hidden-value-multiplayer/` from the public repo `hidden-value-multiplayer`, deployed by GitHub Actions; the original site is unchanged
+- [x] 2-, 3- and 4-player games play to settlement on desktop and phone sizes, at every table
+- [x] All single-player tests still pass; the multiplayer engine, no-cheat and no-leak tests pass; Playwright plays 2- and 3-player games
+- [x] README, About, spec, plan and DECISIONS describe the multiplayer edition
