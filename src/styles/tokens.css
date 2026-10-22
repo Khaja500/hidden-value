@@ -1,0 +1,107 @@
+/* Design tokens. Light = "ticket stock", dark = "after hours". See docs/DECISIONS.md → Design plan. */
+:root {
+  color-scheme: light;
+  --paper: #f2ebdd;
+  --surface: #fbf8f1;
+  --surface-2: #f6f0e4;
+  --sunken: #e9e0cf;
+  --ink: #1c2230;
+  --ink-2: #3a4152;
+  --muted: #5b6272;
+  --rule: #d9cfbc;
+  --rule-strong: #bfb39c;
+  --brass: #a87a1e;
+  --brass-soft: #f1e2bd;
+  --buy: #2456b3;
+  --buy-ink: #ffffff;
+  --buy-soft: #dfe8f8;
+  --sell: #b8412b;
+  --sell-ink: #ffffff;
+  --sell-soft: #f7e0da;
+  --good: #2c7a4b;
+  --bad: #a3392a;
+  --flash: #ffe9a8;
+  --card-face: #fffdf8;
+  --card-red: #b8302a;
+  --card-black: #1c2230;
+  --card-back-a: #263a5e;
+  --card-back-b: #31497a;
+  --focus: #2456b3;
+  --shadow: 0 1px 0 rgba(28, 34, 48, 0.06), 0 6px 18px -10px rgba(28, 34, 48, 0.35);
+  --shadow-lift: 0 2px 0 rgba(28, 34, 48, 0.08), 0 14px 30px -16px rgba(28, 34, 48, 0.45);
+
+  --font-display: 'Fraunces Variable', 'Iowan Old Style', Georgia, serif;
+  --font-ui: 'IBM Plex Sans', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-mono: 'IBM Plex Mono', ui-monospace, 'SF Mono', Menlo, monospace;
+
+  --radius: 10px;
+  --radius-sm: 6px;
+  --gutter: 16px;
+  --maxw: 1240px;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) {
+    color-scheme: dark;
+    --paper: #11161f;
+    --surface: #1a212d;
+    --surface-2: #202836;
+    --sunken: #0c1017;
+    --ink: #ece6d8;
+    --ink-2: #d2ccbe;
+    --muted: #a19c90;
+    --rule: #2e3746;
+    --rule-strong: #445063;
+    --brass: #d6a84a;
+    --brass-soft: #3a2f17;
+    --buy: #6f9ef0;
+    --buy-ink: #0b1220;
+    --buy-soft: #1c2a44;
+    --sell: #f08a6c;
+    --sell-ink: #1d0d08;
+    --sell-soft: #3d2019;
+    --good: #6cc68e;
+    --bad: #f08a6c;
+    --flash: #5a4a17;
+    --card-face: #f4efe3;
+    --card-red: #b8302a;
+    --card-black: #1c2230;
+    --card-back-a: #2c3f63;
+    --card-back-b: #3a5283;
+    --focus: #8fb5ff;
+    --shadow: 0 1px 0 rgba(0, 0, 0, 0.3), 0 8px 22px -12px rgba(0, 0, 0, 0.8);
+    --shadow-lift: 0 2px 0 rgba(0, 0, 0, 0.35), 0 16px 34px -16px rgba(0, 0, 0, 0.9);
+  }
+}
+
+:root[data-theme='dark'] {
+  color-scheme: dark;
+  --paper: #11161f;
+  --surface: #1a212d;
+  --surface-2: #202836;
+  --sunken: #0c1017;
+  --ink: #ece6d8;
+  --ink-2: #d2ccbe;
+  --muted: #a19c90;
+  --rule: #2e3746;
+  --rule-strong: #445063;
+  --brass: #d6a84a;
+  --brass-soft: #3a2f17;
+  --buy: #6f9ef0;
+  --buy-ink: #0b1220;
+  --buy-soft: #1c2a44;
+  --sell: #f08a6c;
+  --sell-ink: #1d0d08;
+  --sell-soft: #3d2019;
+  --good: #6cc68e;
+  --bad: #f08a6c;
+  --flash: #5a4a17;
+  --card-face: #f4efe3;
+  --card-red: #b8302a;
+  --card-black: #1c2230;
+  --card-back-a: #2c3f63;
+  --card-back-b: #3a5283;
+  --focus: #8fb5ff;
+  --shadow: 0 1px 0 rgba(0, 0, 0, 0.3), 0 8px 22px -12px rgba(0, 0, 0, 0.8);
+  --shadow-lift: 0 2px 0 rgba(0, 0, 0, 0.35), 0 16px 34px -16px rgba(0, 0, 0, 0.9);
+}

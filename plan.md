@@ -63,7 +63,7 @@ If the session ends partway, start a new one with:
 ✅ No-cheat test passes; Advisor bot mean P&L > 0 (CI above 0) at Easy, Medium and Hard.
 ❌ If the Advisor loses money at any level, fix the likelihood model or tuning before building the UI.
 
-### 6. Design system and Play page
+### 6. Design system and Play page — [x] done
 🤖
 - Read the frontend-design skill if available; write a short design plan (palette, type, layout) into `docs/DECISIONS.md`, grounded in cards and trading, then build the tokens.
 - Play page per spec §9.2: card row, quote board, Buy at ask / Sell at bid / size / Pass, Advisor panel with belief histogram, trade feed, position panel, keyboard shortcuts, turn-based and timed modes, mobile layout, light/dark themes.
