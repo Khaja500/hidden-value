@@ -17,7 +17,8 @@
     "test:watch": "vitest",
     "e2e": "playwright test",
     "sim": "tsx scripts/sim.ts",
-    "train": "tsx scripts/train.ts"
+    "train": "tsx scripts/train.ts",
+    "bench": "tsx scripts/bench.ts"
   },
   "dependencies": {
     "react": "19.3.1",

@@ -38,7 +38,7 @@ If the session ends partway, start a new one with:
 
 ✅ A full game runs headlessly from a seed; all engine tests pass.
 
-### 3. Belief model
+### 3. Belief model — [x] done
 🤖
 - Particle filter with typed arrays and a precomputed informed-trader lookup table (spec §3).
 - Calibration test over 2,000 simulated games; benchmark update time.
