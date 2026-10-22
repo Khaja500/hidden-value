@@ -50,3 +50,28 @@ The τ̄ = 2 analytical figures use the chosen γ = 0.01, c = 3.
 - **"Add up exactly"** is tested to 1e-9: the parts are floating-point numbers, and a + (b − a) is not always bit-identical to b.
 - **Counterfactuals:** "if inventory were 0" reuses the current beliefs, since inventory never affects beliefs; "if the last two trades had not happened" rebuilds the MM from the event log without them. Both are checked against independent replays through `replayCounterfactual`. Each counterfactual carries a machine-readable `change` field for that check.
 - **Glosten–Milgrom is computed against the bot-trader model**, even for the quote the player faces next in Hard mode. In Hard mode the player's trades move the MM's beliefs but do not widen its spread.
+
+## Advisor (step 5)
+
+- **Final parameters: θ = 0.15, p_min = 0.65, k = 50.** Grid search over θ ∈ {0.05, 0.15, 0.3}, p_min ∈ {0.52, 0.58, 0.65}, k ∈ {25, 50, 100} on 300 validation-seed games per cell and difficulty (2,000 particles; same seeds for every cell, so comparisons are paired). The surface is flat in θ, because the probability condition binds first. p_min = 0.65 beat 0.58 at every difficulty with fewer, better trades and lower variance (summed mean P&L 47.8 vs 44.5). k = 50 and k = 100 tied (most recommended sizes hit the cap of 3 either way), so the smaller k keeps sizes sensitive to the edge. Full grid: `public/research/advisor-tuning.json`.
+- **Held-out results** (2,000 test-seed games per difficulty, 5,000 particles; `npm run sim -- --exp advisor`): Easy +17.5 ± 1.8, Medium +12.0 ± 1.3, Hard +7.4 ± 0.9 mean P&L per game (95% CI), about 1–2 trades per game. All three are above zero, as the spec requires.
+- **Seeds:** validation seeds are `hash("validation", i)` and test seeds `hash("test", i)`, so tuning never sees the reported games.
+- **Two filters:** the Advisor runs one filter with the player's private card(s) and one without, so the private-card effect in the explanation is a real recompute with that information removed. The order-flow effect is (without private) − (public cards only, closed form). The rest of the gap to the MM's mid is shown as the MM's own positioning, and the parts sum exactly to the gap. Public cards shift both estimates equally, so they are reported as context instead of as a share of the gap.
+- **The MM's inventory is public:** it is minus the takers' net buying in the trade feed. The Advisor may use it in explanations ("it is short 4 units, from the trade feed").
+- **Seeds for the Advisor's filters** are derived from the player's private cards only, never from the game seed (which would determine the deal).
+- **Last-round closing** recommends selling a long position when the bid is above the estimate (or buying back a short when the ask is below it), even when the edge is below the normal threshold.
+- **Hard-mode warning** fires after 2 or more consecutive same-side player trades and reports how far the MM's mid has moved since the first of them.
+
+## Design plan (step 6)
+
+No `frontend-design` skill was available in this environment, so this plan is written from scratch.
+
+**Idea: the trading pit's paper.** Open-outcry pits ran on paper order tickets, chalk price boards and playing-card-sized trading cards. The site borrows those materials rather than a generic dark dashboard.
+
+- **Palette (light, "ticket stock"):** paper `#f2ebdd` background, card-white `#fbf8f1` surfaces, ink `#1c2230` text, graphite `#5b6272` secondary text, rule lines `#d9cfbc`. Accent brass `#a87a1e` marks _your_ things (private cards, your trades, your position).
+- **Palette (dark, "after hours"):** pit-board `#11161f` background, `#1a212d` surfaces, chalk `#ece6d8` text, brass `#d6a84a`.
+- **Buy / sell:** buy (lift the ask) is cobalt `#2456b3` with ▲ and the word BUY; sell (hit the bid) is vermilion `#b8412b` with ▼ and the word SELL. Blue and orange-red stay distinguishable under the common colour-vision deficiencies, and colour is never the only cue: every buy/sell element also carries its arrow, its label and its position (BID always left, ASK always right).
+- **Type:** _Fraunces_ (variable serif) for the wordmark, headings and card ranks: it has the engraved, slightly old-exchange feel. _IBM Plex Sans_ for interface text. _IBM Plex Mono_ for every price and quantity, right-aligned with tabular figures so prices never jump. All self-hosted via `@fontsource`.
+- **Motifs:** panels look like order tickets (perforated top edge, small stamped uppercase labels); the quote board looks like a pit price board with big mono digits; cards are real card faces (rank + suit corners), with hidden cards shown as a patterned back.
+- **Motion:** a price change briefly highlights the new number (220 ms); trades slide into the feed. All motion is off under `prefers-reduced-motion`.
+- **Layout (Play):** top bar (round, step, difficulty, mode, countdown); left column cards; centre quote board and order buttons; right column Advisor and belief histogram; bottom trade feed and position. On phones the columns stack, and the quote board and order buttons stick to the bottom of the screen.

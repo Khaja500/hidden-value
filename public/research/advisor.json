@@ -1,0 +1,135 @@
+{
+ "games": 2000,
+ "particles": 5000,
+ "seeds": "test",
+ "params": {
+  "theta": 0.15,
+  "pMin": 0.65,
+  "k": 50
+ },
+ "rows": [
+  {
+   "difficulty": "easy",
+   "games": 2000,
+   "meanPnl": 17.5012,
+   "ci95": 1.78161,
+   "winRate": 0.4345,
+   "winRateWhenTrading": 0.81215,
+   "tradesPerGame": 2.1365,
+   "unitsPerGame": 5.3435,
+   "mmPnl": 7.61525,
+   "calibration": [
+    {
+     "n": 1433,
+     "meanPredicted": 0.671141,
+     "meanRealized": 0.66783,
+     "ci95": 0.0243245,
+     "ok": true
+    },
+    {
+     "n": 1007,
+     "meanPredicted": 0.740994,
+     "meanRealized": 0.763654,
+     "ci95": 0.0270585,
+     "ok": true
+    },
+    {
+     "n": 535,
+     "meanPredicted": 0.840927,
+     "meanRealized": 0.833645,
+     "ci95": 0.0309925,
+     "ok": true
+    },
+    {
+     "n": 1298,
+     "meanPredicted": 0.997996,
+     "meanRealized": 1,
+     "ci95": 0.00243311,
+     "ok": true
+    }
+   ]
+  },
+  {
+   "difficulty": "medium",
+   "games": 2000,
+   "meanPnl": 11.9795,
+   "ci95": 1.25287,
+   "winRate": 0.4265,
+   "winRateWhenTrading": 0.733448,
+   "tradesPerGame": 1.622,
+   "unitsPerGame": 4.3525,
+   "mmPnl": 24.6315,
+   "calibration": [
+    {
+     "n": 1999,
+     "meanPredicted": 0.671335,
+     "meanRealized": 0.678839,
+     "ci95": 0.0205919,
+     "ok": true
+    },
+    {
+     "n": 1100,
+     "meanPredicted": 0.732826,
+     "meanRealized": 0.761818,
+     "ci95": 0.0261491,
+     "ok": false
+    },
+    {
+     "n": 109,
+     "meanPredicted": 0.831229,
+     "meanRealized": 0.862385,
+     "ci95": 0.0703156,
+     "ok": true
+    },
+    {
+     "n": 36,
+     "meanPredicted": 0.972822,
+     "meanRealized": 1,
+     "ci95": 0.0531161,
+     "ok": true
+    }
+   ]
+  },
+  {
+   "difficulty": "hard",
+   "games": 2000,
+   "meanPnl": 7.40575,
+   "ci95": 0.869786,
+   "winRate": 0.405,
+   "winRateWhenTrading": 0.733696,
+   "tradesPerGame": 1.043,
+   "unitsPerGame": 3.004,
+   "mmPnl": 31.6943,
+   "calibration": [
+    {
+     "n": 1365,
+     "meanPredicted": 0.669988,
+     "meanRealized": 0.684982,
+     "ci95": 0.0249453,
+     "ok": true
+    },
+    {
+     "n": 610,
+     "meanPredicted": 0.733505,
+     "meanRealized": 0.757377,
+     "ci95": 0.0350863,
+     "ok": true
+    },
+    {
+     "n": 67,
+     "meanPredicted": 0.832397,
+     "meanRealized": 0.80597,
+     "ci95": 0.0894386,
+     "ok": true
+    },
+    {
+     "n": 38,
+     "meanPredicted": 0.993771,
+     "meanRealized": 1,
+     "ci95": 0.0257895,
+     "ok": true
+    }
+   ]
+  }
+ ]
+}

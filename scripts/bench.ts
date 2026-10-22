@@ -5,7 +5,6 @@ import { rankOf } from '../src/engine/cards';
 import { makeConfig } from '../src/engine/rules';
 
 const N = Number(process.argv[2] ?? 5000);
-/* eslint-disable no-console */
 const times: Record<string, number[]> = { observe: [], reveal: [], gm: [] };
 for (let g = 0; g < 20; g++) {
   const game = createGame(makeConfig('hard', 1000 + g));

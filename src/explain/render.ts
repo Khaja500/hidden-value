@@ -2,8 +2,10 @@
  * Plain-language rendering of quote explanations. Every number comes from the explanation object; the text is a
  * template around it.
  */
+import type { Advice } from '../agents/advisor';
 import { rankName, rankOf } from '../engine/cards';
-import type { FairValueReason, QuoteExplanation } from '../engine/types';
+import { PLAYER_POSITION_LIMIT } from '../engine/rules';
+import type { FairValueReason, PlayerAction, QuoteExplanation } from '../engine/types';
 import { spreadParts } from './quoteExplanation';
 
 const MINUS = '−';
@@ -106,4 +108,149 @@ export function renderExplanation(e: QuoteExplanation): RenderedExplanation {
   }
   const counterfactuals = e.counterfactuals.map((c) => `If ${c.if}: bid ${fmt(c.bid)} / ask ${fmt(c.ask)}.`);
   return { headline, bullets, counterfactuals };
+}
+
+// ---- Advisor ----------------------------------------------------------------------------------------------------
+
+export interface RenderedAdvice {
+  /** e.g. "▲ BUY 2 at the ask (39.0)" or "■ HOLD". */
+  headline: string;
+  estimate: string;
+  edge: string | null;
+  why: string[];
+  risk: string | null;
+  position: string | null;
+  warning: string | null;
+}
+
+function pct(p: number): string {
+  return `${Math.round(p * 100)}%`;
+}
+
+export function privateCardLabel(cards: readonly { card: number }[]): string {
+  return cards.map((c) => rankName(rankOf(c.card))).join(' and ');
+}
+
+export function renderAdvice(a: Advice, privateCards: readonly { card: number }[]): RenderedAdvice {
+  const est = `Your estimate: ${fmt(a.estimate.mean)} ± ${fmt(a.estimate.sd)}`;
+  const why: string[] = [];
+  const at = a.attribution;
+  const label = privateCardLabel(privateCards);
+  const plural = privateCards.length > 1;
+  if (Math.abs(at.privateCard) >= 0.05) {
+    why.push(
+      `Your private ${label} ${at.privateCard > 0 ? 'lift' : 'lower'}${plural ? '' : 's'} your estimate ${fmt(Math.abs(at.privateCard))} ${at.privateCard > 0 ? 'above' : 'below'} what the public information says.`,
+    );
+  } else {
+    why.push(
+      `Your private ${label} ${plural ? 'are' : 'is'} about average, so ${plural ? 'they barely move' : 'it barely moves'} your estimate.`,
+    );
+  }
+  if (Math.abs(at.publicCards) < 1) why.push('Revealed cards so far are about average.');
+  else
+    why.push(
+      `Revealed cards so far are ${at.publicCards > 0 ? 'high' : 'low'}: they moved the public value ${signed(at.publicCards)} from 35.`,
+    );
+  const f = a.flow;
+  const counts = [];
+  if (f.buys) counts.push(`${f.buys} buy${f.buys === 1 ? '' : 's'}`);
+  if (f.sells) counts.push(`${f.sells} sell${f.sells === 1 ? '' : 's'}`);
+  if (f.passes) counts.push(`${f.passes} pass${f.passes === 1 ? '' : 'es'}`);
+  const flowCount = counts.join(', ');
+  if (Math.abs(at.orderFlow) >= 0.15) {
+    why.push(
+      `The trade feed (${flowCount}) suggests informed ${at.orderFlow > 0 ? 'buying' : 'selling'}: ${signed(at.orderFlow)}.`,
+    );
+  } else if (counts.length > 0) {
+    why.push(`The trade feed so far (${flowCount}) tells you little.`);
+  }
+  if (at.mid !== null && Math.abs(at.other) >= 0.3) {
+    const above = at.other < 0;
+    const q = a.mmPosition;
+    const invReason =
+      q < 0 && above
+        ? `: it reacts to the order flow, and it is short ${-q} unit${q < -1 ? 's' : ''} (from the trade feed), which pushes its prices up`
+        : q > 0 && !above
+          ? `: it reacts to the order flow, and it is long ${q} unit${q > 1 ? 's' : ''} (from the trade feed), which pushes its prices down`
+          : ', from its own reading of the order flow';
+    why.push(
+      `The market maker's mid (${fmt(at.mid)}) is ${fmt(Math.abs(at.other))} ${above ? 'above' : 'below'} the public-card value${invReason}.`,
+    );
+  }
+
+  if (a.action === 'hold') {
+    const parts: string[] = [];
+    if (a.buyEdge !== null) {
+      const e = a.buyEdge;
+      parts.push(
+        e <= 0
+          ? `Ask ${fmt(a.estimate.mean - e)} vs your estimate ${fmt(a.estimate.mean)}: buying loses ${fmt(-e)} per unit on average.`
+          : `Buying gains only ${fmt(e)} per unit, less than the ${fmt(a.minEdge)} needed at this level of uncertainty${a.buyProb !== null && a.buyProb < a.pMin ? ` (and only a ${pct(a.buyProb)} chance V ends above the ask)` : ''}.`,
+      );
+    }
+    if (a.sellEdge !== null) {
+      const e = a.sellEdge;
+      parts.push(
+        e <= 0
+          ? `Bid ${fmt(a.estimate.mean + e)}: selling gives up ${fmt(-e)} per unit.`
+          : `Selling gains only ${fmt(e)} per unit, less than the ${fmt(a.minEdge)} needed${a.sellProb !== null && a.sellProb < a.pMin ? ` (only a ${pct(a.sellProb)} chance V ends below the bid)` : ''}.`,
+      );
+    }
+    if (a.maxBuy === 0 && a.buyEdge !== null && a.buyEdge > a.minEdge)
+      parts.push('You cannot buy more: position limit.');
+    if (a.maxSell === 0 && a.sellEdge !== null && a.sellEdge > a.minEdge)
+      parts.push('You cannot sell more: position limit.');
+    parts.push('No good trade right now.');
+    return {
+      headline: '■ HOLD',
+      estimate: est,
+      edge: parts.join(' '),
+      why,
+      risk: null,
+      position: null,
+      warning: renderWarning(a),
+    };
+  }
+
+  const buy = a.action === 'buy';
+  const edge = buy ? a.buyEdge! : a.sellEdge!;
+  const prob = buy ? a.buyProb! : a.sellProb!;
+  const headline = `${buy ? '▲ BUY' : '▼ SELL'} ${a.size} at the ${buy ? 'ask' : 'bid'} (${fmt(a.price)})${a.closing ? ' to close' : ''}`;
+  const edgeLine = `Edge: ${signed(edge)} per unit, ${pct(prob)} chance V ends ${buy ? 'above' : 'below'} ${fmt(a.price)}`;
+  const risk = a.risk
+    ? a.risk.lossPerUnit > 0
+      ? `Risk: if V ends at ${a.risk.value}, you lose ${fmt(a.risk.lossPerUnit)} per unit.`
+      : `Risk: even if V ends at ${a.risk.value}, you still make ${fmt(-a.risk.lossPerUnit)} per unit.`
+    : null;
+  const pos = a.positionAfter;
+  return {
+    headline,
+    estimate: est,
+    edge: edgeLine,
+    why,
+    risk,
+    position: `Position after trade: ${pos > 0 ? '+' : ''}${pos} (limit ${PLAYER_POSITION_LIMIT})`,
+    warning: renderWarning(a),
+  };
+}
+
+function renderWarning(a: Advice): string | null {
+  const w = a.warning;
+  if (!w) return null;
+  const dir = w.midMove >= 0 ? 'rose' : 'fell';
+  return `After your last ${w.count} ${w.side}s the market maker's mid ${dir} ${fmt(Math.abs(w.midMove))}. It is adjusting to your trades: trade too eagerly and its prices move against you.`;
+}
+
+/** One-line verdict on a trade, using only what the player knew at that moment (spec §5.7). */
+export function tradeVerdict(a: Advice, action: PlayerAction): string | null {
+  if (action.side === 'pass') return null;
+  const edge = action.side === 'buy' ? a.buyEdge : a.sellEdge;
+  if (edge === null) return null;
+  const total = edge * action.size;
+  if (edge >= a.minEdge && edge > 0)
+    return `Good trade: ${signed(edge)} expected edge per unit (${signed(total)} total).`;
+  if (edge > 0) return `Small edge: ${signed(edge)} per unit, within the noise of your estimate.`;
+  return action.side === 'buy'
+    ? `Negative edge: you paid ${fmt(-edge)} more than your estimate per unit.`
+    : `Negative edge: you sold ${fmt(-edge)} below your estimate per unit.`;
 }

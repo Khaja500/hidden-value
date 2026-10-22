@@ -54,7 +54,7 @@ If the session ends partway, start a new one with:
 
 ✅ Decomposition and counterfactual tests pass; analytical MM beats naive MM at α ≥ 20%.
 
-### 5. The Advisor
+### 5. The Advisor — [x] done
 🤖
 - No-cheat invariance test first (spec §5.1).
 - Player particle filter, edges and probabilities, decision rule, sizing, attribution, templated BUY/SELL/HOLD cards, post-trade feedback, Advisor bot (spec §5).
