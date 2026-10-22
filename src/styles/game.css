@@ -185,7 +185,7 @@
       'feed'
       'board';
     grid-template-rows: none;
-    padding-bottom: 210px;
+    padding-bottom: 290px;
   }
   /* On phones the quote board and order buttons stay on screen. */
   .play__board {

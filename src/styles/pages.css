@@ -505,6 +505,7 @@
 
 .research__section {
   margin-top: 36px;
+  scroll-margin-top: 72px;
 }
 
 .research__section > h2 {
@@ -728,4 +729,19 @@
   font: 600 1.7rem/1.2 var(--font-ui);
   color: var(--ink);
   margin-bottom: 6px;
+}
+
+/* ---- About ----------------------------------------------------------------------------------------------- */
+
+.about section {
+  margin-top: 28px;
+}
+
+.about ol,
+.about__stack {
+  padding-left: 20px;
+}
+
+.about li + li {
+  margin-top: 6px;
 }

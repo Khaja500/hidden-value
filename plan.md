@@ -100,7 +100,7 @@ If the session ends partway, start a new one with:
 ✅ Expert mode playable; Research page answers whether the learned MM rediscovered inventory skew and adverse-selection widening; deployed.
 ❌ If training is unstable: simplify features, normalize inputs, increase games per evaluation, and record the changes in `docs/DECISIONS.md`.
 
-### 10. Home, About, README and final checks
+### 10. Home, About, README and final checks — [x] done
 🤖
 - Home page with the live self-playing mini market as the hero; About page; final visual polish across all pages; loading and empty states.
 - README: what it is, how to play, how it works, research highlights, screenshot/GIF, live link; set the repo homepage link with `gh repo edit --homepage`.

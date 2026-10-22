@@ -1,4 +1,4 @@
-import { useId } from 'react';
+import { useEffect, useId, useRef, useState } from 'react';
 import type { ReviewStep } from '../explain/review';
 import { fmt } from '../explain/render';
 
@@ -12,7 +12,16 @@ interface Props {
 /** Your estimate, the MM's fair value and the true V across the game, with a scrubber. */
 export function Timeline({ steps, value, current, onSelect }: Props) {
   const id = useId();
-  const W = 760;
+  // Draw at the container's real width so text stays readable on phones.
+  const boxRef = useRef<HTMLDivElement>(null);
+  const [W, setW] = useState(760);
+  useEffect(() => {
+    const el = boxRef.current;
+    if (!el || typeof ResizeObserver === 'undefined') return;
+    const ro = new ResizeObserver(([e]) => setW(Math.max(300, Math.round(e.contentRect.width))));
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, []);
   const H = 230;
   const padL = 38;
   const padR = 14;
@@ -33,7 +42,7 @@ export function Timeline({ steps, value, current, onSelect }: Props) {
   for (let t = Math.ceil(lo / stepY) * stepY; t <= hi; t += stepY) yTicks.push(t);
   const cur = steps[current];
   return (
-    <div className="timeline">
+    <div className="timeline" ref={boxRef}>
       <svg viewBox={`0 0 ${W} ${H}`} role="img" aria-labelledby={`${id}-desc`} className="timeline__chart">
         <desc id={`${id}-desc`}>
           Line chart over {n} steps: your estimate ended at {fmt(steps[n - 1]?.playerMu ?? null)}, the market

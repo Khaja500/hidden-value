@@ -1,4 +1,5 @@
 import { lazy, Suspense, useEffect, useState } from 'react';
+import { REPO_URL } from './config';
 import { Home } from './pages/Home';
 import { Play } from './pages/Play';
 import { href, useRoute } from './router';
@@ -10,8 +11,6 @@ const Daily = lazy(() => import('./pages/Daily').then((m) => ({ default: m.Daily
 const Research = lazy(() => import('./pages/Research').then((m) => ({ default: m.Research })));
 const Sandbox = lazy(() => import('./pages/Sandbox').then((m) => ({ default: m.Sandbox })));
 const About = lazy(() => import('./pages/About').then((m) => ({ default: m.About })));
-
-export const REPO_URL = 'https://github.com/Khaja500/hidden-value';
 
 const NAV = [
   { to: '/play', label: 'Play', names: ['play'] },
