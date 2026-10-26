@@ -8,52 +8,20 @@
 import { create } from 'zustand';
 import { Advisor, type Advice } from '../agents/advisor';
 import { createMultiGame } from '../agents/factory';
-import type { MultiGame, MultiPublicView, MultiSettlement } from '../engine/multiGame';
+import type { MultiGame, MultiPublicView } from '../engine/multiGame';
 import { randomSeed } from '../engine/rng';
 import { makeMultiConfig } from '../engine/rules';
-import type { Difficulty, GameConfig, PlayerAction, PlayerView, Side } from '../engine/types';
+import type { Difficulty, GameConfig, PlayerAction, PlayerView } from '../engine/types';
 import type { Belief } from './gameStore';
+import { buildPartyResult, gradeTrade, type GradedTrade, type PartyResult } from './partyResult';
+
+export type { GradedTrade, PartyResult, PartyStanding } from './partyResult';
 
 export interface PartyOptions {
   names: string[];
   difficulty: Difficulty;
   /** Whether players may ask the Advisor (each ask counts as a hint). */
   advisorOn: boolean;
-}
-
-/** One player trade, graded with that player's own estimate at the time (revealed only after settlement). */
-export interface GradedTrade {
-  seat: number;
-  round: number;
-  step: number;
-  side: Side;
-  size: number;
-  price: number;
-  /** The player's estimate of V when they traded, from their Advisor's filter. */
-  estimate: number;
-  /** Expected profit of the trade at the time: size × (estimate − price) for a buy, size × (price − estimate) for a sell. */
-  expected: number;
-  /** What it actually made at settlement. */
-  actual: number;
-}
-
-export interface PartyStanding {
-  seat: number;
-  name: string;
-  card: number;
-  pnl: number;
-  /** Sum of the trades' expected profit at the time: the part of the score that was skill rather than luck. */
-  expected: number;
-  trades: number;
-  finalUnits: number;
-  hints: number;
-}
-
-export interface PartyResult {
-  settlement: MultiSettlement;
-  /** Best P&L first. */
-  standings: PartyStanding[];
-  trades: GradedTrade[];
 }
 
 export type Stage = 'handoff' | 'turn';
@@ -108,31 +76,6 @@ const INITIAL = {
   result: null,
 };
 
-function buildResult(g: MultiGame, o: PartyOptions, hints: number[]): PartyResult {
-  const settlement = g.settlement();
-  const V = settlement.value;
-  const trades: GradedTrade[] = graded.map((t) => ({
-    ...t,
-    actual: t.size * (t.side === 'buy' ? V - t.price : t.price - V),
-  }));
-  const pub = g.publicView();
-  const standings: PartyStanding[] = o.names.map((name, seat) => {
-    const mine = trades.filter((t) => t.seat === seat);
-    return {
-      seat,
-      name,
-      card: settlement.cards[seat],
-      pnl: settlement.pnl.players[seat],
-      expected: mine.reduce((a, t) => a + t.expected, 0),
-      trades: mine.length,
-      finalUnits: pub.seats[seat].units,
-      hints: hints[seat] ?? 0,
-    };
-  });
-  standings.sort((a, b) => b.pnl - a.pnl || a.seat - b.seat);
-  return { settlement, standings, trades };
-}
-
 export const useParty = create<PartyState>((set, get) => ({
   ...INITIAL,
 
@@ -180,16 +123,7 @@ export const useParty = create<PartyState>((set, get) => ({
     if (action.side !== 'pass') {
       const price = (action.side === 'buy' ? view.quote.ask : view.quote.bid) as number;
       const est = currentAdvice.estimate.mean;
-      graded.push({
-        seat,
-        round: view.round,
-        step: view.step,
-        side: action.side,
-        size: action.size,
-        price,
-        estimate: est,
-        expected: action.size * (action.side === 'buy' ? est - price : price - est),
-      });
+      graded.push(gradeTrade(seat, view.round, view.step, action.side, action.size, price, est));
     }
     game.act(action);
     currentAdvice = null;
@@ -201,7 +135,7 @@ export const useParty = create<PartyState>((set, get) => ({
         status: 'settled',
         pub: game.publicView(),
         lastSeen,
-        result: buildResult(game, st.options!, st.hints),
+        result: buildPartyResult(game, st.options!.names, graded, st.hints),
       });
       return;
     }

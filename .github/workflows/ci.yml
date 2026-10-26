@@ -18,8 +18,11 @@ jobs:
           node-version: 24
           cache: npm
       - run: npm ci
+      # The game server's own dependency (firebase-admin), for the typecheck and the server build.
+      - run: npm ci --prefix server
       - run: npm run lint
       - run: npm run typecheck
+      - run: npm run build:server
       - run: npm test
       - run: npx playwright install --with-deps chromium
       - run: npm run e2e

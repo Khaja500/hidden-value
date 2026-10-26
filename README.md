@@ -10,7 +10,7 @@ This edition is the [original Hidden Value](https://github.com/Khaja500/hidden-v
 
 The asset is worth the sum of five face-down cards. An AI market maker always shows a **bid** (the price it buys at) and an **ask** (the price it sells at). You see one card it doesn't. An **Advisor** tells you, with numbers, when to buy at the ask, sell at the bid, or hold, and why. After every game a **Review** opens up the market maker's reasoning for every price it set. A **Research** page shows simulation results for all of it.
 
-No server, no accounts, no real money: everything (game engine, particle filters, simulations) runs client-side in TypeScript, and the site is deployed to GitHub Pages by GitHub Actions.
+No real money, and no account needed: the game engine, particle filters and simulations all run client-side in TypeScript, and the site is deployed to GitHub Pages by GitHub Actions. An optional free account (email and password) saves your game history and lets you [play friends online](#online-play-and-accounts).
 
 ## How to play
 
@@ -36,6 +36,13 @@ No server, no accounts, no real money: everything (game engine, particle filters
 - **Reveals** use cards nobody holds first. With 3 players there are only 2 such cards, so round 4 reveals a random player's card; with 4 players, rounds 3 and 4 do.
 - **Reading each other:** every trade is in the feed with the player's name. On Hard, the market maker learns from every player's trades, each modelled with that player's own card position. Each player's Advisor (optional, counted as hints) reads the bots' flow but not the other players.
 - **Results:** best P&L wins. Each trade is graded by its expected profit at the time, from that player's own estimate, so the results separate skill ("expected") from luck. Then a rematch on a new deal, or a replay of the same deal.
+
+## Online play and accounts
+
+- **Accounts:** sign up with an email and password on the [Account page](https://khaja500.github.io/hidden-value-multiplayer/#/account). Every game you finish while signed in (practice, daily, tutorial, online) is saved to your history, which you can see, and review, on any device.
+- **Online tables:** open a table on the [Online page](https://khaja500.github.io/hidden-value-multiplayer/#/online), send friends the 6-letter code or invite link, and deal when 2–4 players are in. Each of you plays on your own device, with the same rules as one-screen multiplayer. Your card is always on your screen, there are no hand-offs, and you can pass for a player who has gone quiet for 60 s.
+- **Nobody can peek:** online, only a small game server (Cloud Run) knows the deal. Each browser can read the public table and its own card, enforced by Firestore security rules. The server rebuilds the game from its move list on every move and grades the results the same way as one-screen play.
+- **Free to run:** everything stays inside Google Cloud's free tier, and a budget-triggered function disconnects billing if the project ever costs more than ₹0. Details, limits and deploy commands are in [docs/ONLINE.md](docs/ONLINE.md).
 
 Modes: **Tutorial** (guided first game with an interactive Glosten–Milgrom example), **Practice** (any table; Advisor on demand; turn-based or timed), **Daily challenge** (the same deal for everyone each UTC day, no Advisor, local leaderboard), **Review** (after every game), **Sandbox** (run your own simulations), **Research**.
 
@@ -85,15 +92,19 @@ src/agents/    noise and informed bots, naive / analytical / learned market make
 src/explain/   quote explanations, counterfactual replays, attribution, review, lessons, text rendering
 src/sim/       headless simulation, research checks, CEM training helpers, Sandbox runs
 src/workers/   Web Worker for reviews, skill scores and the Sandbox
+src/online/    accounts and online play: room transitions (pure), packed public view, history, server client, Firebase setup
 src/store/     Zustand stores (single-player holds only the PlayerView; multiplayer holds public info plus the current player's view during their turn), settings, safe localStorage
-src/pages/     Home, Play, Multiplayer (Party.tsx), Tutorial, Review, Daily, Research, Sandbox, About
+src/pages/     Home, Play, Multiplayer (Party.tsx), Online, Account, Tutorial, Review, Daily, Research, Sandbox, About
+server/        the online game server (Node on Cloud Run): verifies sign-ins, runs src/online/rooms.ts in Firestore transactions
+infra/         billing-guard: disconnects billing when the budget reports any spend
+firestore.rules  who can read and write what
 scripts/       sim.ts, train.ts, bench.ts (Node + tsx, worker-thread pool)
 tests/         zero-sum, replay, calibration, decomposition, counterfactual, no-cheat, UI no-leak, multiplayer, e2e
 ```
 
 ## Tech stack
 
-TypeScript (strict) · React 19 · Vite 8 · Zustand · Recharts · Web Workers · Vitest + fast-check · Playwright · ESLint + Prettier · GitHub Actions · GitHub Pages.
+TypeScript (strict) · React 19 · Vite 8 · Zustand · Recharts · Web Workers · Vitest + fast-check · Playwright · ESLint + Prettier · GitHub Actions · GitHub Pages · Firebase Auth + Firestore · Cloud Run.
 
 ## License
 

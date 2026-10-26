@@ -12,6 +12,7 @@ import { dailySeed, randomSeed } from '../engine/rng';
 import { makeConfig } from '../engine/rules';
 import type { Difficulty, GameConfig, PlayerAction, PlayerView, SettledView } from '../engine/types';
 import { tradeVerdict } from '../explain/render';
+import { syncLog } from '../online/sync';
 import { callWorker } from '../workers/client';
 import type { Pacing } from './settings';
 import { load, save } from './storage';
@@ -186,6 +187,7 @@ export const useGame = create<GameState>((set, get) => ({
         ...(st.mode === 'daily' ? { date: todayUTC() } : {}),
       };
       saveLog(log);
+      syncLog(log);
       if (log.date)
         saveDailyScore(log.date, { id: log.id, pnl: log.result.pnl, skill: null, createdAt: log.createdAt });
       currentAdvice = null;
@@ -194,6 +196,7 @@ export const useGame = create<GameState>((set, get) => ({
       void callWorker<number>('skill', { config }).then((advisorPnl) => {
         const updated: GameLog = { ...log, advisorPnl, skill: log.result.pnl - advisorPnl };
         saveLog(updated);
+        syncLog(updated);
         if (updated.date) {
           saveDailyScore(updated.date, {
             id: updated.id,

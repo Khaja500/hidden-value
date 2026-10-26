@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, type ReactNode } from 'react';
 import { AdvisorPanel } from '../components/AdvisorPanel';
 import { PlayingCard } from '../components/PlayingCard';
 import { PositionPanel } from '../components/PositionPanel';
@@ -304,7 +304,15 @@ function PartyGame({ onSetup }: { onSetup: () => void }) {
   );
 }
 
-function Seats({ pub, names, hints }: { pub: MultiPublicView; names: string[]; hints: number[] | null }) {
+export function Seats({
+  pub,
+  names,
+  hints,
+}: {
+  pub: MultiPublicView;
+  names: readonly string[];
+  hints: readonly number[] | null;
+}) {
   const { seat: now, order, acted } = pub.turn;
   const settled = pub.phase === 'settled';
   return (
@@ -350,13 +358,13 @@ function Seats({ pub, names, hints }: { pub: MultiPublicView; names: string[]; h
   );
 }
 
-function TableCards({
+export function TableCards({
   pub,
   names,
   result,
 }: {
   pub: MultiPublicView;
-  names: string[];
+  names: readonly string[];
   result: PartyResult | null;
 }) {
   const revealed = new Map(pub.revealed.map((r) => [r.position, r]));
@@ -499,6 +507,33 @@ function Turn({ name }: { name: string }) {
 
 function Results({ result, names, onSetup }: { result: PartyResult; names: string[]; onSetup: () => void }) {
   const rematch = useParty((s) => s.rematch);
+  return (
+    <ResultsBody result={result} names={names} showHints>
+      <button type="button" className="btn btn--primary" onClick={() => rematch()} data-testid="rematch">
+        Rematch: new deal
+      </button>
+      <button type="button" className="btn" onClick={() => rematch(true)}>
+        Replay this deal
+      </button>
+      <button type="button" className="btn btn--ghost" onClick={onSetup}>
+        Change players or table
+      </button>
+    </ResultsBody>
+  );
+}
+
+/** Settlement, standings and every graded trade; `children` are the buttons underneath. */
+export function ResultsBody({
+  result,
+  names,
+  showHints,
+  children,
+}: {
+  result: PartyResult;
+  names: readonly string[];
+  showHints: boolean;
+  children: ReactNode;
+}) {
   const s = result.settlement;
   const winner = result.standings[0];
   const tied = result.standings.filter((x) => Math.abs(x.pnl - winner.pnl) < 1e-9);
@@ -539,9 +574,11 @@ function Results({ result, names, onSetup }: { result: PartyResult; names: strin
               <th scope="col" className="num">
                 Trades
               </th>
-              <th scope="col" className="num">
-                Hints
-              </th>
+              {showHints && (
+                <th scope="col" className="num">
+                  Hints
+                </th>
+              )}
             </tr>
           </thead>
           <tbody>
@@ -554,7 +591,7 @@ function Results({ result, names, onSetup }: { result: PartyResult; names: strin
                 <td className="num">{signed(p.expected)}</td>
                 <td className="num">{signed(p.pnl - p.expected)}</td>
                 <td className="num">{p.trades}</td>
-                <td className="num">{p.hints}</td>
+                {showHints && <td className="num">{p.hints}</td>}
               </tr>
             ))}
           </tbody>
@@ -610,17 +647,7 @@ function Results({ result, names, onSetup }: { result: PartyResult; names: strin
           </div>
         </details>
       )}
-      <div className="row">
-        <button type="button" className="btn btn--primary" onClick={() => rematch()} data-testid="rematch">
-          Rematch: new deal
-        </button>
-        <button type="button" className="btn" onClick={() => rematch(true)}>
-          Replay this deal
-        </button>
-        <button type="button" className="btn btn--ghost" onClick={onSetup}>
-          Change players or table
-        </button>
-      </div>
+      <div className="row">{children}</div>
     </section>
   );
 }

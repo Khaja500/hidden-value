@@ -18,16 +18,18 @@
     "e2e": "playwright test",
     "sim": "tsx scripts/sim.ts",
     "train": "tsx scripts/train.ts",
-    "bench": "tsx scripts/bench.ts"
+    "bench": "tsx scripts/bench.ts",
+    "build:server": "esbuild server/src/index.ts --bundle --platform=node --format=esm --target=node22 --external:firebase-admin --outfile=server/dist/index.js"
   },
   "dependencies": {
+    "@fontsource-variable/fraunces": "5.3.0",
+    "@fontsource/ibm-plex-mono": "5.3.0",
+    "@fontsource/ibm-plex-sans": "5.3.0",
+    "firebase": "13.1.0",
     "react": "19.3.1",
     "react-dom": "19.3.1",
     "recharts": "3.10.1",
-    "zustand": "5.0.16",
-    "@fontsource-variable/fraunces": "5.3.0",
-    "@fontsource/ibm-plex-mono": "5.3.0",
-    "@fontsource/ibm-plex-sans": "5.3.0"
+    "zustand": "5.0.16"
   },
   "devDependencies": {
     "@eslint/js": "10.0.1",
@@ -38,6 +40,7 @@
     "@types/react": "19.3.0",
     "@types/react-dom": "19.3.0",
     "@vitejs/plugin-react": "6.1.2",
+    "esbuild": "0.28.2",
     "eslint": "10.13.0",
     "eslint-plugin-react-hooks": "7.1.1",
     "eslint-plugin-react-refresh": "0.5.7",

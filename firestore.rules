@@ -1,0 +1,52 @@
+rules_version = '2';
+
+// Who can read and write what. The game server uses the Admin SDK, which bypasses these rules; browsers only:
+//   - read and edit their own profile (users/{uid}: display name and email),
+//   - read their own history, and add or update their own solo games in it (online games are server-written),
+//   - read the rooms they sit at, and their own seat (their card) in each.
+// Deals (rooms/{code}/private) are never readable by any browser.
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function me(uid) {
+      return request.auth != null && request.auth.uid == uid;
+    }
+
+    match /users/{uid} {
+      allow read: if me(uid);
+      allow create, update: if me(uid)
+        && request.resource.data.keys().hasOnly(['displayName', 'email', 'createdAt'])
+        && request.resource.data.displayName is string
+        && request.resource.data.displayName.size() >= 1
+        && request.resource.data.displayName.size() <= 16;
+
+      match /games/{gameId} {
+        allow read, delete: if me(uid);
+        allow create: if me(uid) && validSolo(gameId);
+        // The skill score is filled in a moment after the game ends.
+        allow update: if me(uid) && resource.data.kind == 'solo' && validSolo(gameId)
+          && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['advisorPnl', 'skill']);
+      }
+    }
+
+    function validSolo(gameId) {
+      let d = request.resource.data;
+      return d.kind == 'solo'
+        && d.id == gameId
+        && d.keys().hasOnly(['kind', 'id', 'createdAt', 'mode', 'difficulty', 'pacing', 'config', 'actions',
+                             'hintsUsed', 'result', 'advisorPnl', 'skill', 'date'])
+        && d.mode in ['practice', 'daily', 'tutorial']
+        && d.difficulty in ['easy', 'medium', 'hard', 'expert']
+        && d.createdAt is number
+        && d.actions is list && d.actions.size() <= 40
+        && d.result is map;
+    }
+
+    match /rooms/{code} {
+      allow read: if request.auth != null && request.auth.uid in resource.data.playerUids;
+
+      match /seats/{uid} {
+        allow read: if me(uid);
+      }
+    }
+  }
+}

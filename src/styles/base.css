@@ -432,7 +432,9 @@ input[type='range'] {
 
 select,
 input[type='number'],
-input[type='text'] {
+input[type='text'],
+input[type='email'],
+input[type='password'] {
   font: inherit;
   padding: 8px 10px;
   border-radius: var(--radius-sm);

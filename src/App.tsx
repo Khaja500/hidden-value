@@ -3,9 +3,12 @@ import { REPO_URL } from './config';
 import { Home } from './pages/Home';
 import { Play } from './pages/Play';
 import { href, useRoute } from './router';
+import { useAuth } from './store/authStore';
 import { applyTheme, useSettings, type Theme } from './store/settings';
 
 const Party = lazy(() => import('./pages/Party').then((m) => ({ default: m.Party })));
+const Online = lazy(() => import('./pages/Online').then((m) => ({ default: m.Online })));
+const Account = lazy(() => import('./pages/Account').then((m) => ({ default: m.Account })));
 const Tutorial = lazy(() => import('./pages/Tutorial').then((m) => ({ default: m.Tutorial })));
 const Review = lazy(() => import('./pages/Review').then((m) => ({ default: m.Review })));
 const Daily = lazy(() => import('./pages/Daily').then((m) => ({ default: m.Daily })));
@@ -16,6 +19,7 @@ const About = lazy(() => import('./pages/About').then((m) => ({ default: m.About
 const NAV = [
   { to: '/play', label: 'Play', names: ['play'] },
   { to: '/multiplayer', label: 'Multiplayer', names: ['party'] },
+  { to: '/online', label: 'Online', names: ['online', 'onlineRoom'] },
   { to: '/tutorial', label: 'Tutorial', names: ['tutorial'] },
   { to: '/daily', label: 'Daily', names: ['daily'] },
   { to: '/review', label: 'Review', names: ['review', 'reviewList'] },
@@ -74,8 +78,12 @@ export function App() {
   const theme = useSettings((s) => s.theme);
   const update = useSettings((s) => s.update);
   const [navOpen, setNavOpen] = useState(false);
+  const authStatus = useAuth((s) => s.status);
+  const user = useAuth((s) => s.user);
 
   useEffect(() => applyTheme(theme), [theme]);
+  // Firebase loads after the first paint; nothing offline waits for it.
+  useEffect(() => useAuth.getState().init(), []);
   useEffect(() => {
     setNavOpen(false);
     window.scrollTo({ top: 0 });
@@ -91,6 +99,15 @@ export function App() {
       break;
     case 'party':
       page = <Party />;
+      break;
+    case 'online':
+      page = <Online />;
+      break;
+    case 'onlineRoom':
+      page = <Online code={route.params.code} />;
+      break;
+    case 'account':
+      page = <Account query={route.query} />;
       break;
     case 'tutorial':
       page = <Tutorial />;
@@ -159,6 +176,14 @@ export function App() {
                 {n.label}
               </a>
             ))}
+            <a
+              href={href('/account')}
+              className="nav__account"
+              aria-current={route.name === 'account' ? 'page' : undefined}
+              data-testid="nav-account"
+            >
+              {authStatus === 'signedIn' && user ? user.displayName : 'Sign in'}
+            </a>
             <button
               type="button"
               className="btn btn--small btn--ghost theme-toggle"
@@ -182,8 +207,8 @@ export function App() {
       <footer className="site-footer">
         <div className="site-footer__inner">
           <span>
-            Hidden Value: an explainable market-making card game. Runs entirely in your browser; no accounts,
-            no real money.
+            Hidden Value: an explainable market-making card game. The game runs in your browser; an optional
+            free account saves your history and lets you play friends online. No real money.
           </span>
           <a href={REPO_URL}>Source on GitHub</a>
         </div>

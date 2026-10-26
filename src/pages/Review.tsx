@@ -10,6 +10,7 @@ import { composeAsk, composeBid } from '../explain/quoteExplanation';
 import { fmt, signed } from '../explain/render';
 import type { ReviewData, ReviewStep } from '../explain/review';
 import { href } from '../router';
+import { useAuth } from '../store/authStore';
 import { findLog, loadLogs, type GameLog } from '../store/gameStore';
 import { callWorker } from '../workers/client';
 
@@ -27,7 +28,8 @@ function ReviewList() {
     <main id="main" className="page page--narrow">
       <h1>Your recent games</h1>
       <p className="lede">
-        This browser keeps your last 20 games. Open one to see the market maker’s reasoning step by step.
+        This browser keeps your last 20 games. Open one to see the market maker’s reasoning step by step.{' '}
+        <a href={href('/account')}>Your account</a> keeps every game, on any device.
       </p>
       {logs.length === 0 ? (
         <p className="empty">
@@ -69,8 +71,31 @@ function ReviewList() {
   );
 }
 
+/** The game from this browser's history, or else from the signed-in player's cloud history. */
+function useLog(gameId: string): { log: GameLog | null; searching: boolean } {
+  const local = useMemo(() => findLog(gameId), [gameId]);
+  const status = useAuth((s) => s.status);
+  const uid = useAuth((s) => s.user?.uid);
+  const [cloud, setCloud] = useState<{ id: string; log: GameLog | null } | null>(null);
+  useEffect(() => {
+    if (local || !uid) return;
+    let live = true;
+    import('../online/cloud')
+      .then((c) => c.getSoloGame(uid, gameId))
+      .catch(() => null)
+      .then((log) => live && setCloud({ id: gameId, log }));
+    return () => {
+      live = false;
+    };
+  }, [local, uid, gameId]);
+  if (local) return { log: local, searching: false };
+  const fetched = cloud?.id === gameId ? cloud.log : null;
+  const searching = status === 'loading' || (!!uid && cloud?.id !== gameId);
+  return { log: fetched, searching };
+}
+
 function ReviewGame({ gameId }: { gameId: string }) {
-  const log = useMemo(() => findLog(gameId), [gameId]);
+  const { log, searching } = useLog(gameId);
   const [data, setData] = useState<ReviewData | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [progress, setProgress] = useState(0);
@@ -93,13 +118,22 @@ function ReviewGame({ gameId }: { gameId: string }) {
     };
   }, [log]);
 
+  if (!log && searching) {
+    return (
+      <main id="main" className="page page--narrow">
+        <h1>Review</h1>
+        <p className="muted">Finding your game…</p>
+      </main>
+    );
+  }
   if (!log) {
     return (
       <main id="main" className="page page--narrow">
         <h1>Game not found</h1>
         <p className="empty">
           This game is not in this browser’s history (it keeps the last 20 games).{' '}
-          <a href={href('/review')}>See your recent games</a>.
+          <a href={href('/review')}>See your recent games</a>, or <a href={href('/account')}>sign in</a> to
+          see every game saved to your account.
         </p>
       </main>
     );

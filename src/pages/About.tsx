@@ -18,7 +18,7 @@ export function About() {
       <p className="lede">
         Hidden Value is a small trading game built to make market making explainable. Every price the market
         maker shows can be broken into named parts, every piece of advice comes from numbers you can check,
-        and the whole thing runs in your browser with no server.
+        and the game runs in your browser. Only the optional accounts and online tables use a server.
       </p>
 
       <section>

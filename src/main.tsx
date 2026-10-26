@@ -11,6 +11,7 @@ import './styles/base.css';
 import './styles/game.css';
 import './styles/pages.css';
 import './styles/party.css';
+import './styles/online.css';
 import { App } from './App';
 import { applyTheme, useSettings } from './store/settings';
 

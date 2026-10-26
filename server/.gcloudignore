@@ -1,0 +1,4 @@
+# Only the bundle and the package files are deployed; Cloud Build installs firebase-admin.
+src/
+node_modules/
+.gcloudignore
